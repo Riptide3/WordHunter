@@ -13,9 +13,9 @@
 
 //#include "wordhunter.h"
 //#include "wordmaker.h"
-#include "wordgame.h"
-#include "gamer.h"
-#include "examer.h"
+#include "MainWindow/wordgame.h"
+#include "User/gamer.h"
+#include "User/examer.h"
 
 class SignIn: public QDialog
 {

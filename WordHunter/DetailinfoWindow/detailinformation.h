@@ -5,8 +5,8 @@
 #include <QLabel>
 #include <QGridLayout>
 
-#include "gamer.h"
-#include "examer.h"
+#include "User/gamer.h"
+#include "User/examer.h"
 
 class DetailInformation: public QWidget
 {

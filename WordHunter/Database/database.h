@@ -8,8 +8,8 @@
 #include <QMessageBox>
 #include <QString>
 
-#include "gamer.h"
-#include "examer.h"
+#include "User/gamer.h"
+#include "User/examer.h"
 
 class Database
 {
@@ -23,7 +23,7 @@ public:
     bool examerSignup(QString nickname, QString username, QString password);
     Gamer getGamerInfo(QString username);
     Examer getExamerInfo(QString username);
-    bool addWord(QString w);
+    bool addWord(QString word);
     QString getWord(int difficultDegree);
 private:
     QSqlQuery *query;

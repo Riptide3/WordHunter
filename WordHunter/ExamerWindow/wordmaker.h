@@ -7,8 +7,8 @@
 #include <QLineEdit>
 #include <QGridLayout>
 
-#include "examer.h"
-#include "database.h"
+#include "User/examer.h"
+#include "Database/database.h"
 
 class WordMaker: public QWidget
 {

@@ -33,7 +33,7 @@ void Database::init()
                     nickname varchar(20), password varchar(20), \
                     level int, experiencePoint int, \
                     QuestionNumber int)");
-        query->exec("create table word(word varchar(30) primary key)");
+        query->exec("create table words(word varchar(30) primary key)");
     }
 }
 
@@ -172,30 +172,38 @@ Examer Database::getExamerInfo(QString username)
     return examer;
 }
 
-bool Database::addWord(QString w)
+bool Database::addWord(QString word)
 {
     query = new QSqlQuery;
-    QString isExisting = QString("select * from word where \
-                           word = '%1' ").arg(w);
-    query->exec(isExisting);
-    if(query->first())
+    QString isExisting = QString("select * from words where \
+                           word = '%1' ").arg(word);
+    if(query->exec(isExisting))
     {
-        return false;
+        if(query->first())
+        {
+            return false;
+        }
+        else
+        {
+            QString isNewWord = QString("insert into words values(?)");
+            query->prepare(isNewWord);
+            query->bindValue(0, word);
+            query->exec(isNewWord);
+            qDebug() << word << "success!!!";
+            return true;
+        }
     }
     else
     {
-        QString isNewWord = QString("insert into word values(?)");
-        query->prepare(isNewWord);
-        query->bindValue(0, w);
-        query->exec(isNewWord);
-        return true;
+        qDebug() << query->lastError();
+        return false;
     }
 }
 
 QString Database::getWord(int difficultDegree)
 {
     query = new QSqlQuery;
-    QString getword = QString("select * from word where \
+    QString getword = QString("select * from words where \
                                 length(word)=" + QString::number(difficultDegree) \
                                 + "order by rand() limit 1");
     query->exec(getword);

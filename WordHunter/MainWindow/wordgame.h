@@ -5,12 +5,12 @@
 #include <QTabWidget>
 #include <QGridLayout>
 
-#include "gamer.h"
-#include "examer.h"
-#include "wordhunter.h"
-#include "wordmaker.h"
-#include "rankinglist.h"
-#include "detailinformation.h"
+#include "User/gamer.h"
+#include "User/examer.h"
+#include "GamerWindow/wordhunter.h"
+#include "ExamerWindow/wordmaker.h"
+#include "RanklistWindow/rankinglist.h"
+#include "DetailinfoWindow/detailinformation.h"
 
 class WordGame: public QWidget
 {

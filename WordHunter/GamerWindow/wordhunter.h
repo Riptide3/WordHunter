@@ -11,8 +11,8 @@
 #include <QTime>
 #include <QCoreApplication>
 
-#include "gamer.h"
-#include "database.h"
+#include "User/gamer.h"
+#include "Database/database.h"
 
 class WordHunter: public QWidget
 {

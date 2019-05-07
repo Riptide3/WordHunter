@@ -1,7 +1,7 @@
 #include <QApplication>
 
-#include "database.h"
-#include "signin.h"
+#include "Database/database.h"
+#include "SignUpAndSignIn/signin.h"
 
 int main(int argc, char *argv[])
 {

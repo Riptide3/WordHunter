@@ -25,26 +25,29 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        wordhunter.cpp \
-    signin.cpp \
-    signup.cpp \
-    user.cpp \
-    database.cpp \
-    wordmaker.cpp \
-    gamer.cpp \
-    examer.cpp \
-    rankinglist.cpp \
-    detailinformation.cpp \
-    wordgame.cpp
+    Database/database.cpp \
+    DetailinfoWindow/detailinformation.cpp \
+    ExamerWindow/wordmaker.cpp \
+    GamerWindow/wordhunter.cpp \
+    MainWindow/wordgame.cpp \
+    RanklistWindow/rankinglist.cpp \
+    SignUpAndSignIn/signin.cpp \
+    SignUpAndSignIn/signup.cpp \
+    User/examer.cpp \
+    User/gamer.cpp \
+    User/user.cpp
 
-HEADERS  += wordhunter.h \
-    signin.h \
-    signup.h \
-    user.h \
-    database.h \
-    wordmaker.h \
-    gamer.h \
-    examer.h \
-    rankinglist.h \
-    detailinformation.h \
-    wordgame.h
+HEADERS  += \
+    Database/database.h \
+    DetailinfoWindow/detailinformation.h \
+    ExamerWindow/wordmaker.h \
+    GamerWindow/wordhunter.h \
+    MainWindow/wordgame.h \
+    RanklistWindow/rankinglist.h \
+    SignUpAndSignIn/signin.h \
+    SignUpAndSignIn/signup.h \
+    User/examer.h \
+    User/gamer.h \
+    User/user.h
+
+SUBDIRS += WordHunter.pro

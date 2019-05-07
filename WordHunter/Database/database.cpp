@@ -188,8 +188,7 @@ bool Database::addWord(QString word)
             QString isNewWord = QString("insert into words values(?)");
             query->prepare(isNewWord);
             query->bindValue(0, word);
-            query->exec(isNewWord);
-            qDebug() << word << "success!!!";
+            query->exec();
             return true;
         }
     }

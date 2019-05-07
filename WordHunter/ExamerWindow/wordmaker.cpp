@@ -31,7 +31,7 @@ void WordMaker::on_submitButton_clicked()
     }
     else
     {
-        QMessageBox::warning(this, tr("提示信息"), tr("添加成功"), QMessageBox::Ok);
+        QMessageBox::warning(this, tr("提示信息"), tr("添加失败，单词已存在"), QMessageBox::Ok);
     }
     wordInputLineEdit->clear();
     wordInputLineEdit->setFocus();

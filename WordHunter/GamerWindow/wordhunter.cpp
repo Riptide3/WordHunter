@@ -1,18 +1,19 @@
 #include "wordhunter.h"
 
-WordHunter::WordHunter(Gamer *gamer, QWidget *parent)
-    : QWidget(parent), gamer(gamer)
+WordHunter::WordHunter(Gamer *_gamer, QWidget *parent)
+    : QWidget(parent), gamer(_gamer)
 {
     initUI();
 
     connect(startButton, SIGNAL(clicked()), this, SLOT(on_startButton_clicked()));
     connect(endButton, SIGNAL(clicked()), this, SLOT(on_endButton_clicked()));
-    connect(&countdownTimer, SIGNAL(timeout()), this, SLOT(countdown()));
+    connect(countdownTimer, SIGNAL(timeout()), this, SLOT(countdown()));
+    connect(submitButton, SIGNAL(clicked()), this, SLOT(on_submitButton_clicked()));
 }
 
 WordHunter::~WordHunter()
 {
-
+    endGame();
 }
 
 void WordHunter::initUI()
@@ -33,6 +34,7 @@ void WordHunter::initUI()
     deadlineProgressBar->hide();
     wordInputLineEdit = new QLineEdit;
     wordInputLineEdit->hide();
+    countdownTimer = new QTimer;
 
     wordhunterLayout = new QGridLayout(this);
     wordhunterLayout->addWidget(welcomeLabel, 0, 0);
@@ -75,22 +77,28 @@ void WordHunter::on_submitButton_clicked()
 
 void WordHunter::startGame()
 {
+    isEnd = false;
+
     int stage = gamer->getPassedStageNumber();
-    qDebug() << "stage is " << stage;
-    if(nextStage(stage))
+    while(true && !isEnd)
     {
-        // TODO: 更新用户信息
-        stage++;
-    }
-    else
-    {
-        // TODO: 弹出闯关失败界面
+        if(nextStage(stage))
+        {
+            // TODO: 更新用户信息
+            stage++;
+        }
+        else
+        {
+            endGame();
+            // TODO: 弹出闯关失败界面
+        }
     }
 }
 
 bool WordHunter::nextStage(int stage)
 {
     bool passed = false;
+
     for (int i = 0;i < stage / 10 + 1;i++)
     {
         word = db.getWord(4);
@@ -101,40 +109,50 @@ bool WordHunter::nextStage(int stage)
 
         if(stage < 100)
         {
-            countdownTimer.start(60 - 5 * (stage / 10));
+            countdownTimer->start(60 - 5 * (stage / 10));
         }
         else
         {
-            countdownTimer.start(20);
+            countdownTimer->start(20);
         }
 
 
         while(!submitIsPressed)
         {
+            qDebug() << "waiting " << submitIsPressed;
             QTime t;
             t.start();
-            while(t.elapsed() < 100)
-            QCoreApplication::processEvents();
+            while(t.elapsed() < 300)
+                QCoreApplication::processEvents();
         }
 
         if(wordInputLineEdit->text().trimmed() == word)
         {
             submitIsPressed = false;
             passed = true;
+
+            qDebug() << "正确";
         }
         else
         {
             submitIsPressed = false;
             passed = false;
+
+            qDebug() << "错误";
+
             return passed;
         }
     }
+    qDebug() << "通过";
     return passed;
 }
 
 void WordHunter::endGame()
 {
-
+    countdownTimer->stop();
+    submitIsPressed = true;
+    isEnd = true;
+    qDebug() << "停止";
 }
 
 void WordHunter::countdown()
@@ -145,7 +163,7 @@ void WordHunter::countdown()
     }
     else
     {
-        countdownTimer.stop();
+        countdownTimer->stop();
         deadlineProgressBar->setValue(deadlineProgressBar->minimum());
     }
 }

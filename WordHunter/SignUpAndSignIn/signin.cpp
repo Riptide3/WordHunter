@@ -77,7 +77,6 @@ void SignIn::on_signinButton_clicked()
         QMessageBox::information(this, tr("提示信息"), tr("登录成功!"), QMessageBox::Ok);
         accept();
         Gamer gamer = db.getGamerInfo(username);
-        qDebug() << gamer.getPassedStageNumber();
         wordgame = new WordGame(gamer);
         wordgame->setAttribute(Qt::WA_DeleteOnClose);
         wordgame->show();

@@ -1,6 +1,7 @@
 #include "rankinglist.h"
 
-RankingList::RankingList()
+RankingList::RankingList(QWidget *parent)
+    : QWidget(parent)
 {
 
 }

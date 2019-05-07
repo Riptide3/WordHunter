@@ -8,7 +8,7 @@ class RankingList: public QWidget
     Q_OBJECT
 
 public:
-    RankingList();
+    RankingList(QWidget *parent = nullptr);
     ~RankingList();
 private:
 };

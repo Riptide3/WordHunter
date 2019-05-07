@@ -1,7 +1,7 @@
 #include "wordmaker.h"
 
-WordMaker::WordMaker(Examer *examer, QWidget *parent)
-    : QWidget(parent), examer(examer)
+WordMaker::WordMaker(Examer *_examer, QWidget *parent)
+    : QWidget(parent), examer(_examer)
 {
     welcomeLabel = new QLabel;
     welcomeLabel->setText(examer->getNickname() + tr("，欢迎登录！"));

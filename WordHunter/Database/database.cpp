@@ -148,7 +148,6 @@ Gamer Database::getGamerInfo(QString username)
         level = query->value(3).toInt();
         exp = query->value(4).toInt();
         passedStageNum = query->value(5).toInt();
-        qDebug() << "passed stage num is " << passedStageNum;
     }
     Gamer gamer(nickname, username, level, exp, passedStageNum);
     return gamer;

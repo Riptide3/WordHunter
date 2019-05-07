@@ -15,7 +15,7 @@ class WordMaker: public QWidget
     Q_OBJECT
 
 public:
-    WordMaker(Examer *examer, QWidget *parent = nullptr);
+    WordMaker(Examer *_examer, QWidget *parent = nullptr);
     ~WordMaker();
 
 signals:

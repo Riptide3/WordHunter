@@ -3,12 +3,11 @@
 WordGame::WordGame(Gamer _gamer, QWidget *parent)
     : QWidget(parent), gamer(_gamer)
 {
-    qDebug() << "WordGame gamer:" << gamer.getPassedStageNumber();
     this->resize(QSize(800, 600));
 
     wordhunter = new WordHunter(&gamer);
     rankingList = new RankingList;
-    detailInfo = new DetailInformation(gamer);
+    detailInfo = new DetailInformation(&gamer);
     contentTab = new QTabWidget;
     contentTab->addTab(wordhunter, tr("游戏"));
     contentTab->addTab(rankingList, tr("排行榜"));
@@ -26,7 +25,7 @@ WordGame::WordGame(Examer _examer, QWidget *parent)
 
     wordmaker = new WordMaker(&examer);
     rankingList = new RankingList;
-    detailInfo = new DetailInformation(examer);
+    detailInfo = new DetailInformation(&examer);
     contentTab = new QTabWidget;
     contentTab->addTab(wordmaker, tr("出题"));
     contentTab->addTab(rankingList, tr("排行榜"));

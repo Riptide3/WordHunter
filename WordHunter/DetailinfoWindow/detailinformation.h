@@ -13,12 +13,12 @@ class DetailInformation: public QWidget
     Q_OBJECT
 
 public:
-    DetailInformation(Gamer &gamer);
-    DetailInformation(Examer &examer);
+    DetailInformation(Gamer *_gamer, QWidget *parent = nullptr);
+    DetailInformation(Examer *_examer, QWidget *parent = nullptr);
     ~DetailInformation();
 private:
-    Gamer gamer;
-    Examer examer;
+    Gamer *gamer;
+    Examer *examer;
 
     QLabel *nicknameLabel;
     QLabel *usernameLabel;

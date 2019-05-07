@@ -19,7 +19,7 @@ class WordHunter: public QWidget
     Q_OBJECT
 
 public:
-    WordHunter(Gamer *gamer, QWidget *parent = nullptr);
+    WordHunter(Gamer *_gamer, QWidget *parent = nullptr);
     ~WordHunter();
 protected:
     void initUI();
@@ -38,14 +38,15 @@ private:
     Database db;
     QString word;
     bool submitIsPressed = false;
+    bool isEnd = false;
 
     QLabel *welcomeLabel;
     QPushButton *startButton;
     QPushButton *endButton;
     QPushButton *submitButton;
     QLabel *wordLabel;
+    QTimer *countdownTimer;
     QProgressBar *deadlineProgressBar;
-    QTimer countdownTimer;
     QLineEdit *wordInputLineEdit;
     QGridLayout *wordhunterLayout;
 };

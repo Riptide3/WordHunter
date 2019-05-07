@@ -1,10 +1,12 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 
-#include <Qtsql/QSqlDatabase>
-#include <QtSql/QSqlQuery>
-#include <QDebug>
+#include <QSql>
+#include <QSqlDatabase>
 #include <QSqlError>
+#include <QSqlQuery>
+
+#include <QDebug>
 #include <QMessageBox>
 #include <QString>
 

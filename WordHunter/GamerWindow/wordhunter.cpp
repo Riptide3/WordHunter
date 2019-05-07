@@ -93,7 +93,9 @@ bool WordHunter::nextStage(int stage)
     bool passed = false;
     for (int i = 0;i < stage / 10 + 1;i++)
     {
-        word = db.getWord(3);
+        word = db.getWord(4);
+
+        qDebug() << word;
 
         wordLabel->setText(word);
 
@@ -135,7 +137,8 @@ bool WordHunter::nextStage(int stage)
 
 void WordHunter::endGame()
 {
-    countdownTimer->stop();
+    killTimer(countdownTimer->timerId());
+    qDebug() << "停止计时";
 }
 
 void WordHunter::countdown()

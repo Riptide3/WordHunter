@@ -105,7 +105,7 @@ bool Database::examerSignup(QString nickname, QString username, QString password
 {
     query = new QSqlQuery;
     QString examer = QString("select * from examer where \
-                             username = '%1' ").arg(username);
+                             username = '%1'").arg(username);
     if(query->exec(examer))
     {
         if(query->first())
@@ -138,7 +138,7 @@ Gamer Database::getGamerInfo(QString username)
 {
     query = new QSqlQuery;
     QString getInfo = QString("select * from gamer where \
-                                username = '%1' ").arg(username);
+                                username = '%1'").arg(username);
     query->exec(getInfo);
     QString nickname;
     int level = 0, exp = 0, passedStageNum = 0;
@@ -157,7 +157,7 @@ Examer Database::getExamerInfo(QString username)
 {
     query = new QSqlQuery;
     QString getInfo = QString("select * from gamer where \
-                                username = '%1' ").arg(username);
+                                username = '%1'").arg(username);
     query->exec(getInfo);
     QString nickname;
     int level = 0, exp = 0, questionNum = 0;
@@ -176,7 +176,7 @@ bool Database::addWord(QString word)
 {
     query = new QSqlQuery;
     QString isExisting = QString("select * from words where \
-                           word = '%1' ").arg(word);
+                           word = '%1'").arg(word);
     if(query->exec(isExisting))
     {
         if(query->first())
@@ -202,9 +202,17 @@ bool Database::addWord(QString word)
 QString Database::getWord(int difficultDegree)
 {
     query = new QSqlQuery;
-    QString getword = QString("select * from words where \
-                                length(word)=" + QString::number(difficultDegree) \
-                                + "order by rand() limit 1");
+    QString getword = QString("select * from words where length(word) = %1 \
+                                order by random() limit 1").arg(difficultDegree);
     query->exec(getword);
-    return query->value(0).toString();
+
+    QString word;
+
+    if(query->first())
+    {
+        word = query->value(0).toString();
+
+        qDebug() << "I find one.";
+    }
+    return word;
 }

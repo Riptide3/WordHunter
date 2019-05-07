@@ -17,10 +17,12 @@ class WordGame: public QWidget
     Q_OBJECT
 
 public:
-    WordGame(Gamer gamer);
-    WordGame(Examer examer);
+    WordGame(Gamer _gamer, QWidget *parent = nullptr);
+    WordGame(Examer _examer, QWidget *parent = nullptr);
     ~WordGame();
 private:
+    Gamer gamer;
+    Examer examer;
 
     QTabWidget *contentTab;
     WordHunter *wordhunter;

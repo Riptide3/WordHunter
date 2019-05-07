@@ -45,7 +45,7 @@ private:
     QPushButton *submitButton;
     QLabel *wordLabel;
     QProgressBar *deadlineProgressBar;
-    QTimer *countdownTimer;
+    QTimer countdownTimer;
     QLineEdit *wordInputLineEdit;
     QGridLayout *wordhunterLayout;
 };

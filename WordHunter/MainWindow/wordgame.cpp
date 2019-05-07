@@ -1,7 +1,9 @@
 #include "wordgame.h"
 
-WordGame::WordGame(Gamer gamer)
+WordGame::WordGame(Gamer _gamer, QWidget *parent)
+    : QWidget(parent), gamer(_gamer)
 {
+    qDebug() << "WordGame gamer:" << gamer.getPassedStageNumber();
     this->resize(QSize(800, 600));
 
     wordhunter = new WordHunter(&gamer);
@@ -17,7 +19,8 @@ WordGame::WordGame(Gamer gamer)
     mainLayout->addWidget(contentTab, 0, 0);
 }
 
-WordGame::WordGame(Examer examer)
+WordGame::WordGame(Examer _examer, QWidget *parent)
+    : QWidget(parent), examer(_examer)
 {
     this->resize(QSize(800, 600));
 

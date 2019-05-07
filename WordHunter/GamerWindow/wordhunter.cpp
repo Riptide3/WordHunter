@@ -7,6 +7,7 @@ WordHunter::WordHunter(Gamer *gamer, QWidget *parent)
 
     connect(startButton, SIGNAL(clicked()), this, SLOT(on_startButton_clicked()));
     connect(endButton, SIGNAL(clicked()), this, SLOT(on_endButton_clicked()));
+    connect(&countdownTimer, SIGNAL(timeout()), this, SLOT(countdown()));
 }
 
 WordHunter::~WordHunter()
@@ -32,7 +33,6 @@ void WordHunter::initUI()
     deadlineProgressBar->hide();
     wordInputLineEdit = new QLineEdit;
     wordInputLineEdit->hide();
-    countdownTimer = new QTimer;
 
     wordhunterLayout = new QGridLayout(this);
     wordhunterLayout->addWidget(welcomeLabel, 0, 0);
@@ -76,7 +76,7 @@ void WordHunter::on_submitButton_clicked()
 void WordHunter::startGame()
 {
     int stage = gamer->getPassedStageNumber();
-
+    qDebug() << "stage is " << stage;
     if(nextStage(stage))
     {
         // TODO: 更新用户信息
@@ -94,9 +94,6 @@ bool WordHunter::nextStage(int stage)
     for (int i = 0;i < stage / 10 + 1;i++)
     {
         word = db.getWord(4);
-
-        qDebug() << word;
-
         wordLabel->setText(word);
 
         deadlineProgressBar->setRange(0, 100);
@@ -104,13 +101,13 @@ bool WordHunter::nextStage(int stage)
 
         if(stage < 100)
         {
-            countdownTimer->start(60 - 5 * (stage / 10));
+            countdownTimer.start(60 - 5 * (stage / 10));
         }
         else
         {
-            countdownTimer->start(20);
+            countdownTimer.start(20);
         }
-        connect(countdownTimer, SIGNAL(timeout()), this, SLOT(countdown()));
+
 
         while(!submitIsPressed)
         {
@@ -137,8 +134,7 @@ bool WordHunter::nextStage(int stage)
 
 void WordHunter::endGame()
 {
-    killTimer(countdownTimer->timerId());
-    qDebug() << "停止计时";
+
 }
 
 void WordHunter::countdown()
@@ -149,6 +145,7 @@ void WordHunter::countdown()
     }
     else
     {
+        countdownTimer.stop();
         deadlineProgressBar->setValue(deadlineProgressBar->minimum());
     }
 }

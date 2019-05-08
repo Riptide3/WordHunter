@@ -72,86 +72,74 @@ void WordHunter::on_endButton_clicked()
 
 void WordHunter::on_submitButton_clicked()
 {
-    submitIsPressed = true;
+    if(isCorrect())
+    {
+        wordInputLineEdit->clear();
+
+        wordNum--;
+        if(wordNum == 0)
+        {
+            stage++;
+            wordNum = stage / 10 + 1;
+        }
+        showNextWord();
+        // TODO: 更新用户信息
+    }
+    else if(wordInputLineEdit->text().trimmed().isEmpty())
+    {
+        ; // do nothing
+    }
+    else
+    {
+        wordInputLineEdit->clear();
+
+        endGame();
+        // TODO: 更新用户信息，弹出闯关失败界面，回到开始界面
+    }
 }
 
 void WordHunter::startGame()
 {
-    isEnd = false;
+    stage = gamer->getPassedStageNumber();
+    wordNum = stage / 10 + 1;
+    showNextWord();
+}
 
-    int stage = gamer->getPassedStageNumber();
-    while(true && !isEnd)
+void WordHunter::showNextWord()
+{
+    word = db.getWord(4);
+    wordLabel->setText(word);
+
+    deadlineProgressBar->setRange(0, 100);
+    deadlineProgressBar->setValue(100);
+
+    if(stage < 100)
     {
-        if(nextStage(stage))
-        {
-            // TODO: 更新用户信息
-            stage++;
-        }
-        else
-        {
-            endGame();
-            // TODO: 弹出闯关失败界面
-        }
+        countdownTimer->start(60 - 5 * (stage / 10));
+    }
+    else
+    {
+        countdownTimer->start(20);
     }
 }
 
-bool WordHunter::nextStage(int stage)
+bool WordHunter::isCorrect()
 {
-    bool passed = false;
-
-    for (int i = 0;i < stage / 10 + 1;i++)
+    if(wordInputLineEdit->text().trimmed() == word)
     {
-        word = db.getWord(4);
-        wordLabel->setText(word);
-
-        deadlineProgressBar->setRange(0, 100);
-        deadlineProgressBar->setValue(100);
-
-        if(stage < 100)
-        {
-            countdownTimer->start(60 - 5 * (stage / 10));
-        }
-        else
-        {
-            countdownTimer->start(20);
-        }
-
-
-        while(!submitIsPressed)
-        {
-            qDebug() << "waiting " << submitIsPressed;
-            QTime t;
-            t.start();
-            while(t.elapsed() < 300)
-                QCoreApplication::processEvents();
-        }
-
-        if(wordInputLineEdit->text().trimmed() == word)
-        {
-            submitIsPressed = false;
-            passed = true;
-
-            qDebug() << "正确";
-        }
-        else
-        {
-            submitIsPressed = false;
-            passed = false;
-
-            qDebug() << "错误";
-
-            return passed;
-        }
+        qDebug() << "正确";
+        return true;
     }
-    qDebug() << "通过";
-    return passed;
+    else
+    {
+        qDebug() << "错误";
+        return false;
+    }
 }
 
 void WordHunter::endGame()
 {
     countdownTimer->stop();
-    submitIsPressed = true;
-    isEnd = true;
     qDebug() << "停止";
 }
 

@@ -32,13 +32,14 @@ public slots:
 private:
     void startGame();
     void endGame();
-    bool nextStage(int stage);
+    void showNextWord();
+    bool isCorrect();
 private:
     Gamer *gamer;
     Database db;
     QString word;
-    bool submitIsPressed = false;
-    bool isEnd = false;
+    int wordNum;
+    int stage;
 
     QLabel *welcomeLabel;
     QPushButton *startButton;

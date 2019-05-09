@@ -78,8 +78,6 @@ void SignIn::on_signinButton_clicked()
         accept();
         Gamer gamer = db.getGamerInfo(username);
 
-        qDebug() << "登录时" << gamer.getUsername() << gamer.getExperiencePoint();
-
         wordgame = new WordGame(gamer);
         wordgame->setAttribute(Qt::WA_DeleteOnClose);
         wordgame->show();

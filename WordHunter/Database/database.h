@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QString>
+#include <QVector>
 
 #include "User/gamer.h"
 #include "User/examer.h"
@@ -29,6 +30,8 @@ public:
     Examer getExamerInfo(QString username);
     bool addWord(QString word);
     QString getWord(int difficultDegree);
+    QVector<Gamer> getGamerRanklist();
+    QVector<Examer> getExamerRanklist();
 private:
     QSqlQuery *query;
 };

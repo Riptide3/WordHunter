@@ -250,3 +250,47 @@ QString Database::getWord(int difficultDegree)
     }
     return word;
 }
+
+QVector<Gamer> Database::getGamerRanklist()
+{
+    query = new QSqlQuery;
+    QString getRanklist = QString("select * from gamer");
+
+    QVector<Gamer> gamerRanklist;
+
+    query->exec(getRanklist);
+
+    while(query->next())
+    {
+        QString nickname = query->value(1).toString();
+        QString username = query->value(0).toString();
+        int level = query->value(3).toInt();
+        int exp = query->value(4).toInt();
+        int passedStage = query->value(5).toInt();
+        Gamer gamer(nickname, username, level, exp, passedStage);
+        gamerRanklist.append(gamer);
+    }
+    return gamerRanklist;
+}
+
+QVector<Examer> Database::getExamerRanklist()
+{
+    query = new QSqlQuery;
+    QString getRanklist = QString("select * from examer");
+
+    QVector<Examer> examerRanklist;
+
+    query->exec(getRanklist);
+
+    while(query->next())
+    {
+        QString nickname = query->value(1).toString();
+        QString username = query->value(0).toString();
+        int level = query->value(3).toInt();
+        int exp = query->value(4).toInt();
+        int questionNum = query->value(5).toInt();
+        Examer examer(nickname, username, level, exp, questionNum);
+        examerRanklist.append(examer);
+    }
+    return examerRanklist;
+}

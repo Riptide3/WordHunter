@@ -73,40 +73,46 @@ void SignUp::on_signupButton_clicked()
     QString password = passwordLineEdit->text().trimmed();
     QString repassword = rePasswordLineEdit->text().trimmed();
     bool success = false;
-
-    if(password == repassword)
+    if(nickname.isEmpty() || username.isEmpty() || password.isEmpty() || repassword.isEmpty())
     {
-        if(selectButton->checkedId() == 1)
-        {
-            success = db.gamerSignup(nickname, username, password);
-        }
-        else if(selectButton->checkedId() == 2)
-        {
-            success = db.examerSignup(nickname, username, password);
-        }
-
-        if(success)
-        {
-            QMessageBox::information(this, tr("提示信息"), tr("注册成功！"), QMessageBox::Ok);
-            nicknameLineEdit->clear();
-            usernameLineEdit->clear();
-            passwordLineEdit->clear();
-            rePasswordLineEdit->clear();
-            nicknameLineEdit->setFocus();
-        }
-        else
-        {
-            QMessageBox::warning(this, tr("警告！"), tr("注册失败，用户名已存在！"), QMessageBox::Ok);
-
-            usernameLineEdit->clear();
-            usernameLineEdit->setFocus();
-        }
+        QMessageBox::warning(this, tr("警告"), tr("个人资料不能为空"), QMessageBox::Ok);
     }
     else
     {
-        passwordLineEdit->clear();
-        rePasswordLineEdit->clear();
-        passwordLineEdit->setFocus();
-        QMessageBox::warning(this, tr("警告"), tr("两次输入密码不一致"), QMessageBox::Ok);
+        if(password == repassword)
+        {
+            if(selectButton->checkedId() == 1)
+            {
+                success = db.gamerSignup(nickname, username, password);
+            }
+            else if(selectButton->checkedId() == 2)
+            {
+                success = db.examerSignup(nickname, username, password);
+            }
+
+            if(success)
+            {
+                QMessageBox::information(this, tr("提示信息"), tr("注册成功！"), QMessageBox::Ok);
+                nicknameLineEdit->clear();
+                usernameLineEdit->clear();
+                passwordLineEdit->clear();
+                rePasswordLineEdit->clear();
+                nicknameLineEdit->setFocus();
+            }
+            else
+            {
+                QMessageBox::warning(this, tr("警告！"), tr("注册失败，用户名已存在！"), QMessageBox::Ok);
+
+                usernameLineEdit->clear();
+                usernameLineEdit->setFocus();
+            }
+        }
+        else
+        {
+            passwordLineEdit->clear();
+            rePasswordLineEdit->clear();
+            passwordLineEdit->setFocus();
+            QMessageBox::warning(this, tr("警告"), tr("两次输入密码不一致"), QMessageBox::Ok);
+        }
     }
 }

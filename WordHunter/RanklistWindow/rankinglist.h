@@ -2,6 +2,9 @@
 #define RANKINGLIST_H
 
 #include <QWidget>
+#include <QTableWidget>
+#include <QVector>
+#include <QGridLayout>
 
 class RankingList: public QWidget
 {
@@ -11,6 +14,12 @@ public:
     RankingList(QWidget *parent = nullptr);
     ~RankingList();
 private:
+    void initRanklist();
+private:
+    QTableWidget *gamerRanklist;
+    QTableWidget *examerRanklist;
+
+    QGridLayout *mainLayout;
 };
 
 #endif // RANKINGLIST_H

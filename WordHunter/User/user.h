@@ -14,6 +14,10 @@ public:
     QString getUsername();
     int getLevel();
     int getExperiencePoint();
+    void changeNickname(QString newNickname);
+    void addExp(int expAddition);
+protected:
+    void addLevel(int levelAddition);
 private:
     QString nickname;
     QString username;

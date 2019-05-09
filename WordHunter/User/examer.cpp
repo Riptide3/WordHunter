@@ -1,4 +1,5 @@
 #include "examer.h"
+#include "Database/database.h"
 
 Examer::Examer()
 {
@@ -19,4 +20,15 @@ Examer::~Examer()
 int Examer::getQuestionNumber()
 {
     return questionNumber;
+}
+
+void Examer::addQuestionNumber(int questionAddition)
+{
+    questionNumber += questionAddition;
+}
+
+void Examer::updateInfo(const Examer &examer)
+{
+    Database db;
+    db.updateInfo(examer);
 }

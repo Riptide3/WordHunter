@@ -23,6 +23,8 @@ public:
     bool gamerSignup(QString nickname, QString username, QString password);
     bool examerSignin(QString username, QString password);
     bool examerSignup(QString nickname, QString username, QString password);
+    void updateInfo(Gamer gamer);
+    void updateInfo(Examer examer);
     Gamer getGamerInfo(QString username);
     Examer getExamerInfo(QString username);
     bool addWord(QString word);

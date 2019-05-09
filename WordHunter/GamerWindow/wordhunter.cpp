@@ -60,13 +60,6 @@ void WordHunter::on_startButton_clicked()
 
 void WordHunter::on_endButton_clicked()
 {
-    endButton->hide();
-    submitButton->hide();
-    wordLabel->hide();
-    deadlineProgressBar->hide();
-    wordInputLineEdit->hide();
-    startButton->show();
-
     endGame();
 }
 
@@ -76,14 +69,19 @@ void WordHunter::on_submitButton_clicked()
     {
         wordInputLineEdit->clear();
 
+        gamer->addExp(stage + 5);
+
         wordNum--;
         if(wordNum == 0)
         {
             stage++;
+            gamer->addStage(1);
+//            qDebug() << stage;
             wordNum = stage / 10 + 1;
         }
+        gamer->updateInfo(*gamer);
+        word = "";
         showNextWord();
-        // TODO: 更新用户信息
     }
     else if(wordInputLineEdit->text().trimmed().isEmpty())
     {
@@ -91,10 +89,12 @@ void WordHunter::on_submitButton_clicked()
     }
     else
     {
+        gamer->addExp(1);
+        gamer->updateInfo(*gamer);
         wordInputLineEdit->clear();
-
+        word = "";
+        QMessageBox::warning(this, tr("警告!"), tr("挑战失败，请重新来过!"), QMessageBox::Ok);
         endGame();
-        // TODO: 更新用户信息，弹出闯关失败界面，回到开始界面
     }
 }
 
@@ -107,19 +107,36 @@ void WordHunter::startGame()
 
 void WordHunter::showNextWord()
 {
-    word = db.getWord(4);
-    wordLabel->setText(word);
-
-    deadlineProgressBar->setRange(0, 100);
-    deadlineProgressBar->setValue(100);
-
-    if(stage < 100)
+    /* 单词难度调整 */
+    qsrand(static_cast<uint>(QTime(0,0,0).secsTo(QTime::currentTime())));
+    if(stage < 30)
     {
-        countdownTimer->start(60 - 5 * (stage / 10));
+        while(word.isEmpty())
+        {
+            word = db.getWord(stage / 10 + rand() % 3 + 1);
+        }
     }
     else
     {
-        countdownTimer->start(20);
+        while(word.isEmpty())
+        {
+            word = db.getWord(7 + rand() % 14);
+        }
+    }
+    wordLabel->setText(word);
+
+    countdownTimer->start(50);
+
+    /* 计时时间调整 */
+    if(stage < 70)
+    {
+        deadlineProgressBar->setRange(0, 80 - stage);
+        deadlineProgressBar->setValue(80 - stage);
+    }
+    else
+    {
+        deadlineProgressBar->setRange(0, 10);
+        deadlineProgressBar->setValue(10);
     }
 }
 
@@ -139,6 +156,13 @@ bool WordHunter::isCorrect()
 
 void WordHunter::endGame()
 {
+    endButton->hide();
+    submitButton->hide();
+    wordLabel->hide();
+    deadlineProgressBar->hide();
+    wordInputLineEdit->hide();
+    startButton->show();
+
     countdownTimer->stop();
     qDebug() << "停止";
 }
@@ -152,6 +176,7 @@ void WordHunter::countdown()
     else
     {
         countdownTimer->stop();
+        wordLabel->clear();
         deadlineProgressBar->setValue(deadlineProgressBar->minimum());
     }
 }

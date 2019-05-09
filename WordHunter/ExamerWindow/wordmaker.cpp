@@ -27,6 +27,10 @@ void WordMaker::on_submitButton_clicked()
 {
     if(database.addWord(wordInputLineEdit->text().trimmed()))
     {
+        int length = wordInputLineEdit->text().trimmed().length();
+        examer->addExp(length);
+        examer->addQuestionNumber(1);
+        examer->updateInfo(*examer);
         QMessageBox::information(this, tr("提示信息"), tr("添加成功"), QMessageBox::Ok);
     }
     else

@@ -9,8 +9,11 @@ public:
     Examer();
     Examer(QString nn, QString un, int lv, int exp, int questionNum);
     ~Examer();
+    Examer(const Examer&) = default;
 
     int getQuestionNumber();
+    void addQuestionNumber(int questionAddition);
+    void updateInfo(const Examer &examer);
 private:
     int questionNumber;
 };

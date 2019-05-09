@@ -11,8 +11,6 @@
 #include <QButtonGroup>
 #include <QDebug>
 
-//#include "wordhunter.h"
-//#include "wordmaker.h"
 #include "MainWindow/wordgame.h"
 #include "User/gamer.h"
 #include "User/examer.h"

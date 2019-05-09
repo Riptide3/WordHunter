@@ -9,8 +9,11 @@ public:
     Gamer();
     Gamer(QString nn, QString un, int lv, int exp, int passNum);
     ~Gamer();
+    Gamer(const Gamer&) = default;
 
     int getPassedStageNumber();
+    void addStage(int stageAddition);
+    void updateInfo(const Gamer &gamer);
 private:
     int passedStageNumber;
 };

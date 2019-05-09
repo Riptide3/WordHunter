@@ -16,6 +16,8 @@ WordGame::WordGame(Gamer _gamer, QWidget *parent)
     mainLayout = new QGridLayout(this);
 
     mainLayout->addWidget(contentTab, 0, 0);
+
+    connect(contentTab, SIGNAL(tabBarClicked(int)), this, SLOT(refreshGamerInfo()));
 }
 
 WordGame::WordGame(Examer _examer, QWidget *parent)
@@ -34,9 +36,21 @@ WordGame::WordGame(Examer _examer, QWidget *parent)
     mainLayout = new QGridLayout(this);
 
     mainLayout->addWidget(contentTab, 0, 0);
+
+    connect(contentTab, SIGNAL(tabBarClicked(int)), this, SLOT(refreshExamerInfo()));
 }
 
 WordGame::~WordGame()
 {
 
+}
+
+void WordGame::refreshGamerInfo()
+{
+    detailInfo->gamerInfoRefresh();
+}
+
+void WordGame::refreshExamerInfo()
+{
+    detailInfo->examerInfoRefresh();
 }

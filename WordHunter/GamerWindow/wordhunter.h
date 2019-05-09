@@ -10,6 +10,7 @@
 #include <QTimer>
 #include <QTime>
 #include <QCoreApplication>
+#include <QtGlobal>
 
 #include "User/gamer.h"
 #include "Database/database.h"

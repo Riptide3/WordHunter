@@ -156,7 +156,7 @@ Gamer Database::getGamerInfo(QString username)
 Examer Database::getExamerInfo(QString username)
 {
     query = new QSqlQuery;
-    QString getInfo = QString("select * from gamer where \
+    QString getInfo = QString("select * from examer where \
                                 username = '%1'").arg(username);
     query->exec(getInfo);
     QString nickname;
@@ -170,6 +170,38 @@ Examer Database::getExamerInfo(QString username)
     }
     Examer examer(nickname, username, level, exp, questionNum);
     return examer;
+}
+
+void Database::updateInfo(Gamer gamer)
+{
+    query = new QSqlQuery;
+    QString updateInfo = QString("update gamer \
+                                    set nickname = '%1', \
+                                    level = %2, \
+                                    experiencePoint = %3, \
+                                    passedStageNumber = %4 \
+                                    where username = '%5'").arg(gamer.getNickname()) \
+                                                           .arg(gamer.getLevel()) \
+                                                           .arg(gamer.getExperiencePoint()) \
+                                                           .arg(gamer.getPassedStageNumber()) \
+                                                           .arg(gamer.getUsername());
+    query->exec(updateInfo);
+}
+
+void Database::updateInfo(Examer examer)
+{
+    query = new QSqlQuery;
+    QString updateInfo = QString("update examer \
+                                    set nickname = '%1', \
+                                    level = %2, \
+                                    experiencePoint = %3, \
+                                    QuestionNumber = %4 \
+                                    where username = '%5'").arg(examer.getNickname()) \
+                                                           .arg(examer.getLevel()) \
+                                                           .arg(examer.getExperiencePoint()) \
+                                                           .arg(examer.getQuestionNumber()) \
+                                                           .arg(examer.getUsername());
+    query->exec(updateInfo);
 }
 
 bool Database::addWord(QString word)

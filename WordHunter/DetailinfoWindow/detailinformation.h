@@ -16,6 +16,9 @@ public:
     DetailInformation(Gamer *_gamer, QWidget *parent = nullptr);
     DetailInformation(Examer *_examer, QWidget *parent = nullptr);
     ~DetailInformation();
+
+    void gamerInfoRefresh();
+    void examerInfoRefresh();
 private:
     Gamer *gamer;
     Examer *examer;

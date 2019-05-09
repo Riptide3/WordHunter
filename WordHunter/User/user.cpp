@@ -35,3 +35,25 @@ int User::getExperiencePoint()
 {
     return experiencePoint;
 }
+
+void User::changeNickname(QString newNickname)
+{
+    nickname = newNickname;
+}
+
+void User::addLevel(int levelAddition)
+{
+    level += levelAddition;
+}
+
+void User::addExp(int expAddition)
+{
+    const int maxExp = (level + 1) * 10;
+
+    experiencePoint += expAddition;
+    if(experiencePoint > maxExp)
+    {
+        experiencePoint = experiencePoint - maxExp - 1;
+        addLevel(1);
+    }
+}

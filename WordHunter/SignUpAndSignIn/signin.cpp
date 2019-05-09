@@ -62,41 +62,48 @@ void SignIn::on_signinButton_clicked()
     Database db;
     QString username = usernameLineEdit->text().trimmed();
     QString password = passwordLineEdit->text().trimmed();
-    bool success = false;
-    if(selectButton->checkedId() == 1)
+    if(username.isEmpty() || password.isEmpty())
     {
-        success = db.gamerSignin(username, password);
-    }
-    else if(selectButton->checkedId() == 2)
-    {
-        success = db.examerSignin(username, password);
-    }
-
-    if(success && selectButton->checkedId() == 1)
-    {
-        QMessageBox::information(this, tr("提示信息"), tr("登录成功!"), QMessageBox::Ok);
-        accept();
-        Gamer gamer = db.getGamerInfo(username);
-
-        wordgame = new WordGame(gamer);
-        wordgame->setAttribute(Qt::WA_DeleteOnClose);
-        wordgame->show();
-    }
-    else if(success && selectButton->checkedId() == 2)
-    {
-        QMessageBox::information(this, tr("提示信息"), tr("登录成功!"), QMessageBox::Ok);
-        accept();
-        Examer examer = db.getExamerInfo(username);
-        wordgame = new WordGame(examer);
-        wordgame->setAttribute(Qt::WA_DeleteOnClose);
-        wordgame->show();
+        QMessageBox::warning(this, tr("警告"), tr("账号密码不能为空!"), QMessageBox::Ok);
     }
     else
     {
-        QMessageBox::warning(this, tr("警告!"), tr("用户名、密码或用户类型错误！"), QMessageBox::Ok);
-        usernameLineEdit->clear();
-        passwordLineEdit->clear();
-        usernameLineEdit->setFocus();
+        bool success = false;
+        if(selectButton->checkedId() == 1)
+        {
+            success = db.gamerSignin(username, password);
+        }
+        else if(selectButton->checkedId() == 2)
+        {
+            success = db.examerSignin(username, password);
+        }
+
+        if(success && selectButton->checkedId() == 1)
+        {
+            QMessageBox::information(this, tr("提示信息"), tr("登录成功!"), QMessageBox::Ok);
+            accept();
+            Gamer gamer = db.getGamerInfo(username);
+
+            wordgame = new WordGame(gamer);
+            wordgame->setAttribute(Qt::WA_DeleteOnClose);
+            wordgame->show();
+        }
+        else if(success && selectButton->checkedId() == 2)
+        {
+            QMessageBox::information(this, tr("提示信息"), tr("登录成功!"), QMessageBox::Ok);
+            accept();
+            Examer examer = db.getExamerInfo(username);
+            wordgame = new WordGame(examer);
+            wordgame->setAttribute(Qt::WA_DeleteOnClose);
+            wordgame->show();
+        }
+        else
+        {
+            QMessageBox::warning(this, tr("警告!"), tr("用户名、密码或用户类型错误！"), QMessageBox::Ok);
+            usernameLineEdit->clear();
+            passwordLineEdit->clear();
+            usernameLineEdit->setFocus();
+        }
     }
 }
 
@@ -105,4 +112,3 @@ void SignIn::on_signupButton_clicked()
     SignUp signup;
     signup.exec();
 }
-

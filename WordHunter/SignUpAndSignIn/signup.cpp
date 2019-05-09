@@ -101,7 +101,7 @@ void SignUp::on_signupButton_clicked()
             }
             else
             {
-                QMessageBox::warning(this, tr("警告！"), tr("注册失败，用户名已存在！"), QMessageBox::Ok);
+                QMessageBox::warning(this, tr("警告"), tr("注册失败，用户名已存在！"), QMessageBox::Ok);
 
                 usernameLineEdit->clear();
                 usernameLineEdit->setFocus();

@@ -13,6 +13,10 @@ class RankingList: public QWidget
 public:
     RankingList(QWidget *parent = nullptr);
     ~RankingList();
+    void refreshRanklist();
+private slots:
+    void sortGamerColumn(int index);
+    void sortExamerColumn(int index);
 private:
     void initRanklist();
 private:

@@ -17,7 +17,7 @@ WordGame::WordGame(Gamer _gamer, QWidget *parent)
 
     mainLayout->addWidget(contentTab, 0, 0);
 
-    connect(contentTab, SIGNAL(tabBarClicked(int)), this, SLOT(refreshGamerInfo()));
+    connect(contentTab, SIGNAL(tabBarClicked(int)), this, SLOT(refreshGamerInfo(int)));
 }
 
 WordGame::WordGame(Examer _examer, QWidget *parent)
@@ -37,7 +37,7 @@ WordGame::WordGame(Examer _examer, QWidget *parent)
 
     mainLayout->addWidget(contentTab, 0, 0);
 
-    connect(contentTab, SIGNAL(tabBarClicked(int)), this, SLOT(refreshExamerInfo()));
+    connect(contentTab, SIGNAL(tabBarClicked(int)), this, SLOT(refreshExamerInfo(int)));
 }
 
 WordGame::~WordGame()
@@ -45,12 +45,36 @@ WordGame::~WordGame()
 
 }
 
-void WordGame::refreshGamerInfo()
+void WordGame::refreshGamerInfo(int index)
 {
-    detailInfo->gamerInfoRefresh();
+    switch(index)
+    {
+        case 1:
+            rankingList->refreshRanklist();
+            break;
+
+        case 2:
+            detailInfo->gamerInfoRefresh();
+            break;
+
+        default:
+            break;
+    }
 }
 
-void WordGame::refreshExamerInfo()
+void WordGame::refreshExamerInfo(int index)
 {
-    detailInfo->examerInfoRefresh();
+    switch(index)
+    {
+        case 1:
+            rankingList->refreshRanklist();
+            break;
+
+        case 2:
+            detailInfo->examerInfoRefresh();
+            break;
+
+        default:
+            break;
+    }
 }

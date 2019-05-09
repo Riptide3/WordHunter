@@ -9,6 +9,7 @@ WordHunter::WordHunter(Gamer *_gamer, QWidget *parent)
     connect(endButton, SIGNAL(clicked()), this, SLOT(on_endButton_clicked()));
     connect(countdownTimer, SIGNAL(timeout()), this, SLOT(countdown()));
     connect(submitButton, SIGNAL(clicked()), this, SLOT(on_submitButton_clicked()));
+    connect(wordInputLineEdit, SIGNAL(returnPressed()), this, SLOT(on_submitButton_clicked()));
 }
 
 WordHunter::~WordHunter()
@@ -54,6 +55,7 @@ void WordHunter::on_startButton_clicked()
     wordLabel->show();
     deadlineProgressBar->show();
     wordInputLineEdit->show();
+    wordInputLineEdit->setFocus();
 
     startGame();
 }

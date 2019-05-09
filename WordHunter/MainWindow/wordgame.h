@@ -32,8 +32,8 @@ private:
 
     QGridLayout *mainLayout;
 private slots:
-    void refreshGamerInfo();
-    void refreshExamerInfo();
+    void refreshGamerInfo(int index);
+    void refreshExamerInfo(int index);
 };
 
 #endif // WORDGAME_H

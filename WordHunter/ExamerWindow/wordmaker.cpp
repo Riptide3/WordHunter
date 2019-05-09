@@ -15,6 +15,7 @@ WordMaker::WordMaker(Examer *_examer, QWidget *parent)
     wordmakerLayout->addWidget(wordInputLineEdit, 1, 0, 1, 1, Qt::AlignCenter);
     wordmakerLayout->addWidget(submitButton, 2, 0, 1, 1, Qt::AlignCenter);
 
+    connect(wordInputLineEdit, SIGNAL(returnPressed()), this, SLOT(on_submitButton_clicked()));
     connect(submitButton, SIGNAL(clicked()), this, SLOT(on_submitButton_clicked()));
 }
 
@@ -25,18 +26,25 @@ WordMaker::~WordMaker()
 
 void WordMaker::on_submitButton_clicked()
 {
-    if(database.addWord(wordInputLineEdit->text().trimmed()))
+    QString word = wordInputLineEdit->text().trimmed();
+    if(word.isEmpty())
     {
-        int length = wordInputLineEdit->text().trimmed().length();
-        examer->addExp(length);
-        examer->addQuestionNumber(1);
-        examer->updateInfo(*examer);
-        QMessageBox::information(this, tr("提示信息"), tr("添加成功"), QMessageBox::Ok);
+        ;// do nothing
     }
     else
     {
-        QMessageBox::warning(this, tr("提示信息"), tr("添加失败，单词已存在"), QMessageBox::Ok);
+        if(database.addWord(word))
+        {
+            examer->addExp(word.length());
+            examer->addQuestionNumber(1);
+            examer->updateInfo(*examer);
+            QMessageBox::information(this, tr("提示信息"), tr("添加成功"), QMessageBox::Ok);
+        }
+        else
+        {
+            QMessageBox::warning(this, tr("提示信息"), tr("添加失败，单词已存在"), QMessageBox::Ok);
+        }
+        wordInputLineEdit->clear();
+        wordInputLineEdit->setFocus();
     }
-    wordInputLineEdit->clear();
-    wordInputLineEdit->setFocus();
 }

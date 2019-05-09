@@ -15,6 +15,9 @@ RankingList::RankingList(QWidget *parent)
     mainLayout = new QGridLayout(this);
     mainLayout->addWidget(gamerRanklist, 0, 0);
     mainLayout->addWidget(examerRanklist, 0, 1);
+
+    connect(gamerRanklist->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(sortGamerColumn(int)));
+    connect(examerRanklist->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(sortExamerColumn(int)));
 }
 
 RankingList::~RankingList()
@@ -63,5 +66,42 @@ void RankingList::initRanklist()
         examerRanklist->setItem(rowIndex, 1, new QTableWidgetItem(examerIter->getUsername()));
         examerRanklist->setItem(rowIndex, 2, new QTableWidgetItem(QString::number(examerIter->getLevel())));
         examerRanklist->setItem(rowIndex, 3, new QTableWidgetItem(QString::number(examerIter->getQuestionNumber())));
+    }
+}
+
+void RankingList::refreshRanklist()
+{
+    gamerRanklist->clearContents();
+    examerRanklist->clearContents();
+    gamerRanklist->setRowCount(0);
+    examerRanklist->setRowCount(0);
+    initRanklist();
+}
+
+void RankingList::sortGamerColumn(int index)
+{
+    switch(index)
+    {
+        case 0:
+        case 1:
+            gamerRanklist->sortByColumn(index, Qt::AscendingOrder);
+            break;
+        default:
+            gamerRanklist->sortByColumn(index, Qt::DescendingOrder);
+            break;
+    }
+}
+
+void RankingList::sortExamerColumn(int index)
+{
+    switch(index)
+    {
+        case 0:
+        case 1:
+            examerRanklist->sortByColumn(index, Qt::AscendingOrder);
+            break;
+        default:
+            examerRanklist->sortByColumn(index, Qt::DescendingOrder);
+            break;
     }
 }

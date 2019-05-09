@@ -17,7 +17,7 @@ Examer::~Examer()
 
 }
 
-int Examer::getQuestionNumber()
+int Examer::getQuestionNumber() const
 {
     return questionNumber;
 }

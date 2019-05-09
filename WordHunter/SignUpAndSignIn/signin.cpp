@@ -18,7 +18,7 @@ SignIn::~SignIn()
 
 void SignIn::initUI()
 {
-    this->setMinimumSize(350, 200);
+    this->setMinimumSize(300, 200);
     this->setWindowTitle(tr("登录"));
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint);
 
@@ -41,8 +41,8 @@ void SignIn::initUI()
     signupButton = new QPushButton;
     signupButton->setText(tr("注册"));
     selectButton = new QButtonGroup;
-    selectButton->addButton(gamerButton, 1);
-    selectButton->addButton(examerButton, 2);
+    selectButton->addButton(gamerButton, 0);
+    selectButton->addButton(examerButton, 1);
 
     selectUserLayout = new QGridLayout;
     selectUserLayout->addWidget(gamerButton, 0, 0);
@@ -69,16 +69,16 @@ void SignIn::on_signinButton_clicked()
     else
     {
         bool success = false;
-        if(selectButton->checkedId() == 1)
+        if(selectButton->checkedId() == 0)
         {
             success = db.gamerSignin(username, password);
         }
-        else if(selectButton->checkedId() == 2)
+        else if(selectButton->checkedId() == 1)
         {
             success = db.examerSignin(username, password);
         }
 
-        if(success && selectButton->checkedId() == 1)
+        if(success && selectButton->checkedId() == 0)
         {
             QMessageBox::information(this, tr("提示信息"), tr("登录成功!"), QMessageBox::Ok);
             accept();
@@ -88,7 +88,7 @@ void SignIn::on_signinButton_clicked()
             wordgame->setAttribute(Qt::WA_DeleteOnClose);
             wordgame->show();
         }
-        else if(success && selectButton->checkedId() == 2)
+        else if(success && selectButton->checkedId() == 1)
         {
             QMessageBox::information(this, tr("提示信息"), tr("登录成功!"), QMessageBox::Ok);
             accept();

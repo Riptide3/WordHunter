@@ -8,10 +8,12 @@ WordGame::WordGame(Gamer _gamer, QWidget *parent)
     wordhunter = new WordHunter(&gamer);
     rankingList = new RankingList;
     detailInfo = new DetailInformation(&gamer);
+    searchUser = new SearchUser;
     contentTab = new QTabWidget;
     contentTab->addTab(wordhunter, tr("游戏"));
     contentTab->addTab(rankingList, tr("排行榜"));
     contentTab->addTab(detailInfo, tr("用户信息"));
+    contentTab->addTab(searchUser, tr("查找用户"));
 
     mainLayout = new QGridLayout(this);
 

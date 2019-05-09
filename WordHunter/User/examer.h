@@ -11,7 +11,7 @@ public:
     ~Examer();
     Examer(const Examer&) = default;
 
-    int getQuestionNumber();
+    int getQuestionNumber() const;
     void addQuestionNumber(int questionAddition);
     void updateInfo(const Examer &examer);
 private:

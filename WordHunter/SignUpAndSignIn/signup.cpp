@@ -16,7 +16,7 @@ SignUp::~SignUp()
 
 void SignUp::initUI()
 {
-    this->setMinimumSize(350, 230);
+    this->setMinimumSize(300, 230);
     this->setWindowTitle(tr("注册"));
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint);
 

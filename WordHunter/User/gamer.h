@@ -11,7 +11,7 @@ public:
     ~Gamer();
     Gamer(const Gamer&) = default;
 
-    int getPassedStageNumber();
+    int getPassedStageNumber() const;
     void addStage(int stageAddition);
     void updateInfo(const Gamer &gamer);
 private:

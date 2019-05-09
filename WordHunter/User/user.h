@@ -10,10 +10,10 @@ public:
     User();
     ~User();
 
-    QString getNickname();
-    QString getUsername();
-    int getLevel();
-    int getExperiencePoint();
+    QString getNickname() const;
+    QString getUsername() const;
+    int getLevel() const;
+    int getExperiencePoint() const;
     void changeNickname(QString newNickname);
     void addExp(int expAddition);
 protected:

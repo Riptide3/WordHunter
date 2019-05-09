@@ -78,7 +78,6 @@ void WordHunter::on_submitButton_clicked()
         {
             stage++;
             gamer->addStage(1);
-//            qDebug() << stage;
             wordNum = stage / 10 + 1;
         }
         gamer->updateInfo(*gamer);

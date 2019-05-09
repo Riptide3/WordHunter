@@ -35,7 +35,9 @@ SOURCES += main.cpp\
     SignUpAndSignIn/signup.cpp \
     User/examer.cpp \
     User/gamer.cpp \
-    User/user.cpp
+    User/user.cpp \
+    SearchUserWindow/searchuser.cpp \
+    SearchUserWindow/userinformation.cpp
 
 HEADERS  += \
     Database/database.h \
@@ -48,6 +50,8 @@ HEADERS  += \
     SignUpAndSignIn/signup.h \
     User/examer.h \
     User/gamer.h \
-    User/user.h
+    User/user.h \
+    SearchUserWindow/searchuser.h \
+    SearchUserWindow/userinformation.h
 
 SUBDIRS += WordHunter.pro

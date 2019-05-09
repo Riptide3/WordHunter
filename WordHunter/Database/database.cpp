@@ -294,3 +294,53 @@ QVector<Examer> Database::getExamerRanklist()
     }
     return examerRanklist;
 }
+
+Gamer Database::findGamer(QString username)
+{
+    query = new QSqlQuery;
+    QString find = QString("select * from gamer where \
+                            username = '%1'").arg(username);
+    query->exec(find);
+
+    if(query->first())
+    {
+        QString nickname = query->value(1).toString();
+        QString username = query->value(0).toString();
+        int level = query->value(3).toInt();
+        int exp = query->value(4).toInt();
+        int passedStage = query->value(5).toInt();
+        Gamer gamer(nickname, username, level, exp, passedStage);
+        return  gamer;
+    }
+    else
+    {
+        qDebug() << query->lastError();
+        Gamer gamer("", "", 0, 0, 0);
+        return gamer;
+    }
+}
+
+Examer Database::findExamer(QString username)
+{
+    query = new QSqlQuery;
+    QString find = QString("select * from examer where \
+                            username = '%1'").arg(username);
+    query->exec(find);
+
+    if(query->first())
+    {
+        QString nickname = query->value(1).toString();
+        QString username = query->value(0).toString();
+        int level = query->value(3).toInt();
+        int exp = query->value(4).toInt();
+        int questionNum = query->value(5).toInt();
+        Examer examer(nickname, username, level, exp, questionNum);
+        return examer;
+    }
+    else
+    {
+        qDebug() << query->lastError();
+        Examer examer("", "", 0, 0, 0);
+        return examer;
+    }
+}

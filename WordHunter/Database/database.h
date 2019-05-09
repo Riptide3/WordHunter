@@ -32,6 +32,8 @@ public:
     QString getWord(int difficultDegree);
     QVector<Gamer> getGamerRanklist();
     QVector<Examer> getExamerRanklist();
+    Gamer findGamer(QString username);
+    Examer findExamer(QString username);
 private:
     QSqlQuery *query;
 };

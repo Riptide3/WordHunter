@@ -11,6 +11,7 @@
 #include "ExamerWindow/wordmaker.h"
 #include "RanklistWindow/rankinglist.h"
 #include "DetailinfoWindow/detailinformation.h"
+#include "SearchUserWindow/searchuser.h"
 
 class WordGame: public QWidget
 {
@@ -29,6 +30,7 @@ private:
     WordMaker *wordmaker;
     RankingList *rankingList;
     DetailInformation *detailInfo;
+    SearchUser *searchUser;
 
     QGridLayout *mainLayout;
 private slots:

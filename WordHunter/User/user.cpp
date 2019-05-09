@@ -16,22 +16,22 @@ User::~User()
 
 }
 
-QString User::getNickname()
+QString User::getNickname() const
 {
     return nickname;
 }
 
-QString User::getUsername()
+QString User::getUsername() const
 {
     return username;
 }
 
-int User::getLevel()
+int User::getLevel() const
 {
     return level;
 }
 
-int User::getExperiencePoint()
+int User::getExperiencePoint() const
 {
     return experiencePoint;
 }

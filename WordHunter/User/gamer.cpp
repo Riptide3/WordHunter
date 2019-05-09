@@ -17,7 +17,7 @@ Gamer::~Gamer()
 
 }
 
-int Gamer::getPassedStageNumber()
+int Gamer::getPassedStageNumber() const
 {
     return passedStageNumber;
 }

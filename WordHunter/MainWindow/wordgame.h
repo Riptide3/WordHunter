@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QTabWidget>
-#include <QGridLayout>
 
 #include "User/gamer.h"
 #include "User/examer.h"
@@ -13,7 +12,7 @@
 #include "DetailinfoWindow/detailinformation.h"
 #include "SearchUserWindow/searchuser.h"
 
-class WordGame: public QWidget
+class WordGame: public QMainWindow
 {
     Q_OBJECT
 
@@ -31,8 +30,6 @@ private:
     RankingList *rankingList;
     DetailInformation *detailInfo;
     SearchUser *searchUser;
-
-    QGridLayout *mainLayout;
 private slots:
     void refreshGamerInfo(int index);
     void refreshExamerInfo(int index);

@@ -1,7 +1,7 @@
 #include "wordgame.h"
 
 WordGame::WordGame(Gamer _gamer, QWidget *parent)
-    : QWidget(parent), gamer(_gamer)
+    : QMainWindow(parent), gamer(_gamer)
 {
     this->resize(QSize(800, 600));
 
@@ -15,15 +15,13 @@ WordGame::WordGame(Gamer _gamer, QWidget *parent)
     contentTab->addTab(detailInfo, tr("用户信息"));
     contentTab->addTab(searchUser, tr("查找用户"));
 
-    mainLayout = new QGridLayout(this);
-
-    mainLayout->addWidget(contentTab, 0, 0);
+    this->setCentralWidget(contentTab);
 
     connect(contentTab, SIGNAL(tabBarClicked(int)), this, SLOT(refreshGamerInfo(int)));
 }
 
 WordGame::WordGame(Examer _examer, QWidget *parent)
-    : QWidget(parent), examer(_examer)
+    : QMainWindow(parent), examer(_examer)
 {
     this->resize(QSize(800, 600));
 
@@ -37,9 +35,7 @@ WordGame::WordGame(Examer _examer, QWidget *parent)
     contentTab->addTab(detailInfo, tr("用户信息"));
     contentTab->addTab(searchUser, tr("查找用户"));
 
-    mainLayout = new QGridLayout(this);
-
-    mainLayout->addWidget(contentTab, 0, 0);
+    this->setCentralWidget(contentTab);
 
     connect(contentTab, SIGNAL(tabBarClicked(int)), this, SLOT(refreshExamerInfo(int)));
 }

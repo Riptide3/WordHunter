@@ -68,11 +68,10 @@ void SignIn::on_signinButton_clicked()
     }
     else
     {
-        STATE state = ERROR;
+        STATE state = NOUSER;
         if(selectButton->checkedId() == 0)
         {
             state = db.gamerSignin(username, password);
-            qDebug() << "玩家登录" << state;
         }
         else if(selectButton->checkedId() == 1)
         {
@@ -101,14 +100,21 @@ void SignIn::on_signinButton_clicked()
         }
         else if(state == ONLINE)
         {
-            QMessageBox::warning(this, tr("警告!"), tr("该用户已经登录！"), QMessageBox::Ok);
+            QMessageBox::warning(this, tr("警告"), tr("该用户已经登录"), QMessageBox::Ok);
             usernameLineEdit->clear();
             passwordLineEdit->clear();
             usernameLineEdit->setFocus();
         }
-        else
+        else if(state == WRONGPASSWD)
         {
-            QMessageBox::warning(this, tr("警告!"), tr("用户名、密码或用户类型错误！"), QMessageBox::Ok);
+            QMessageBox::warning(this, tr("警告"), tr("密码错误!"), QMessageBox::Ok);
+            usernameLineEdit->clear();
+            passwordLineEdit->clear();
+            usernameLineEdit->setFocus();
+        }
+        else if(state == NOUSER)
+        {
+            QMessageBox::warning(this, tr("警告"), tr("用户不存在!"), QMessageBox::Ok);
             usernameLineEdit->clear();
             passwordLineEdit->clear();
             usernameLineEdit->setFocus();

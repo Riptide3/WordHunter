@@ -39,23 +39,29 @@ void Database::init()
 
 STATE Database::gamerSignin(QString username, QString password)
 {
-    STATE state = ERROR;
+    STATE state = NOUSER;
     query = new QSqlQuery;
     QString gamer = QString("select * from gamer where \
-                            username = '%1' \
-                            and password = '%2'").arg(username).arg(password);
+                            username = '%1'").arg(username);
     query->exec(gamer);
-    qDebug() << "数据库中的登录函数";
+
     if(query->first())
     {
-        state = static_cast<STATE>(query->value(6).toInt());
-        qDebug() << "状态" <<state;
-        if(state == OFFLINE)
+        if(query->value(2).toString() == password)
         {
-            QString online = QString("update gamer set \
-                                      state = %1 \
-                                      where username = '%2'").arg(ONLINE).arg(username);
-            query->exec(online);
+            state = static_cast<STATE>(query->value(6).toInt());
+
+            if(state == OFFLINE)
+            {
+                QString online = QString("update gamer set \
+                                          state = %1 \
+                                          where username = '%2'").arg(ONLINE).arg(username);
+                query->exec(online);
+            }
+        }
+        else
+        {
+            state = WRONGPASSWD;
         }
     }
     else
@@ -102,22 +108,27 @@ bool Database::gamerSignup(QString nickname, QString username, QString password)
 
 STATE Database::examerSignin(QString username, QString password)
 {
-    STATE state = ERROR;
+    STATE state = NOUSER;
     query = new QSqlQuery;
     QString examer = QString("select * from examer where \
-                              username = '%1' \
-                              and password = '%2'").arg(username).arg(password);
+                              username = '%1'").arg(username);
     query->exec(examer);
     if(query->first())
     {
-        state = static_cast<STATE>(query->value(6).toInt());
-        qDebug() << "状态" <<state;
-        if(state == OFFLINE)
+        if(query->value(2).toString() == password)
         {
-            QString online = QString("update examer set \
-                                      state = %1 \
-                                      where username = '%2'").arg(ONLINE).arg(username);
-            query->exec(online);
+            state = static_cast<STATE>(query->value(6).toInt());
+            if(state == OFFLINE)
+            {
+                QString online = QString("update examer set \
+                                          state = %1 \
+                                          where username = '%2'").arg(ONLINE).arg(username);
+                query->exec(online);
+            }
+        }
+        else
+        {
+            state = WRONGPASSWD;
         }
     }
 

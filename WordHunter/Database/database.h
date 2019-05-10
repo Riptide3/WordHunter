@@ -14,7 +14,7 @@
 #include "User/gamer.h"
 #include "User/examer.h"
 
-enum STATE {OFFLINE, ONLINE, ERROR};
+enum STATE {OFFLINE, ONLINE, WRONGPASSWD, NOUSER};
 
 class Database
 {

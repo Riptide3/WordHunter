@@ -29,6 +29,8 @@ void WordHunter::initUI()
     submitButton = new QPushButton;
     submitButton->setText(tr("提交"));
     submitButton->hide();
+    stageLabel = new QLabel;
+    stageLabel->hide();
     wordLabel = new QLabel;
     wordLabel->hide();
     deadlineProgressBar = new QProgressBar;
@@ -41,10 +43,11 @@ void WordHunter::initUI()
     wordhunterLayout->addWidget(welcomeLabel, 0, 0);
     wordhunterLayout->addWidget(startButton, 1, 0, 1, 1, Qt::AlignCenter);
     wordhunterLayout->addWidget(endButton, 1, 0, 1, 1, Qt::AlignCenter);
-    wordhunterLayout->addWidget(wordLabel, 2, 0, 1, 1, Qt::AlignCenter);
-    wordhunterLayout->addWidget(deadlineProgressBar, 3, 0, 1, 1, Qt::AlignCenter);
-    wordhunterLayout->addWidget(wordInputLineEdit, 4, 0, 1, 1, Qt::AlignCenter);
-    wordhunterLayout->addWidget(submitButton, 5, 0, 1, 1, Qt::AlignCenter);
+    wordhunterLayout->addWidget(stageLabel, 2, 0, 1, 1, Qt::AlignCenter);
+    wordhunterLayout->addWidget(wordLabel, 3, 0, 1, 1, Qt::AlignCenter);
+    wordhunterLayout->addWidget(deadlineProgressBar, 4, 0, 1, 1, Qt::AlignCenter);
+    wordhunterLayout->addWidget(wordInputLineEdit, 5, 0, 1, 1, Qt::AlignCenter);
+    wordhunterLayout->addWidget(submitButton, 6, 0, 1, 1, Qt::AlignCenter);
 }
 
 void WordHunter::on_startButton_clicked()
@@ -52,10 +55,9 @@ void WordHunter::on_startButton_clicked()
     startButton->hide();
     endButton->show();
     submitButton->show();
+    stageLabel->show();
     wordLabel->show();
     deadlineProgressBar->show();
-    wordInputLineEdit->show();
-    wordInputLineEdit->setFocus();
 
     startGame();
 }
@@ -70,6 +72,7 @@ void WordHunter::on_submitButton_clicked()
     if(isCorrect())
     {
         wordInputLineEdit->clear();
+        wordInputLineEdit->hide();
 
         gamer->addExp(stage + 5);
 
@@ -124,6 +127,7 @@ void WordHunter::showNextWord()
             word = db.getWord(7 + rand() % 14);
         }
     }
+    stageLabel->setText(tr("关卡 ") + QString::number(stage));
     wordLabel->setText(word);
 
     countdownTimer->start(50);
@@ -159,6 +163,7 @@ void WordHunter::endGame()
 {
     endButton->hide();
     submitButton->hide();
+    stageLabel->hide();
     wordLabel->hide();
     deadlineProgressBar->hide();
     wordInputLineEdit->hide();
@@ -177,7 +182,9 @@ void WordHunter::countdown()
     else
     {
         countdownTimer->stop();
-        wordLabel->clear();
         deadlineProgressBar->setValue(deadlineProgressBar->minimum());
+        wordLabel->clear();
+        wordInputLineEdit->show();
+        wordInputLineEdit->setFocus();
     }
 }

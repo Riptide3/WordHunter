@@ -2,6 +2,7 @@
 #include "Database/database.h"
 
 Examer::Examer()
+    : User("", "", 0, 0), questionNumber(0)
 {
 
 }

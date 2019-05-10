@@ -28,25 +28,42 @@ void Database::init()
         query->exec("create table gamer(username varchar(20) primary key, \
                     nickname varchar(20), password varchar(20), \
                     level int, experiencePoint int, \
-                    passedStageNumber int)");
+                    passedStageNumber int, state int)");
         query->exec("create table examer(username varchar(20) primary key, \
                     nickname varchar(20), password varchar(20), \
                     level int, experiencePoint int, \
-                    QuestionNumber int)");
+                    QuestionNumber int, state int)");
         query->exec("create table words(word varchar(30) primary key)");
     }
 }
 
-bool Database::gamerSignin(QString username, QString password)
+STATE Database::gamerSignin(QString username, QString password)
 {
+    STATE state = ERROR;
     query = new QSqlQuery;
     QString gamer = QString("select * from gamer where \
-                            username = '%1' and password = '%2' ").arg(username).arg(password);
+                            username = '%1' \
+                            and password = '%2'").arg(username).arg(password);
     query->exec(gamer);
+    qDebug() << "数据库中的登录函数";
     if(query->first())
-        return true;
+    {
+        state = static_cast<STATE>(query->value(6).toInt());
+        qDebug() << "状态" <<state;
+        if(state == OFFLINE)
+        {
+            QString online = QString("update gamer set \
+                                      state = %1 \
+                                      where username = '%2'").arg(ONLINE).arg(username);
+            query->exec(online);
+        }
+    }
     else
-        return false;
+    {
+        qDebug() << query->lastError();
+    }
+
+    return state;
 }
 
 bool Database::gamerSignup(QString nickname, QString username, QString password)
@@ -62,7 +79,7 @@ bool Database::gamerSignup(QString nickname, QString username, QString password)
         }
         else
         {
-            QString nGamer = QString("insert into gamer values(?, ?, ?, ?, ?, ?)");
+            QString nGamer = QString("insert into gamer values(?, ?, ?, ?, ?, ?, ?)");
             query->prepare(nGamer);
             query->bindValue(0, username);
             query->bindValue(1, nickname);
@@ -70,6 +87,7 @@ bool Database::gamerSignup(QString nickname, QString username, QString password)
             query->bindValue(3, 0);
             query->bindValue(4, 0);
             query->bindValue(5, 0);
+            query->bindValue(6, OFFLINE);
             query->exec();
             qDebug() << "注册成功";
             return true;
@@ -82,23 +100,28 @@ bool Database::gamerSignup(QString nickname, QString username, QString password)
     }
 }
 
-bool Database::examerSignin(QString username, QString password)
+STATE Database::examerSignin(QString username, QString password)
 {
+    STATE state = ERROR;
     query = new QSqlQuery;
     QString examer = QString("select * from examer where \
-                             username = '%1' and password = '%2' ").arg(username).arg(password);
-    if(query->exec(examer))
+                              username = '%1' \
+                              and password = '%2'").arg(username).arg(password);
+    query->exec(examer);
+    if(query->first())
     {
-        if(query->first())
-            return true;
-        else
-            return false;
+        state = static_cast<STATE>(query->value(6).toInt());
+        qDebug() << "状态" <<state;
+        if(state == OFFLINE)
+        {
+            QString online = QString("update examer set \
+                                      state = %1 \
+                                      where username = '%2'").arg(ONLINE).arg(username);
+            query->exec(online);
+        }
     }
-    else
-    {
-        qDebug() << query->lastError();
-        return false;
-    }
+
+    return state;
 }
 
 bool Database::examerSignup(QString nickname, QString username, QString password)
@@ -114,7 +137,7 @@ bool Database::examerSignup(QString nickname, QString username, QString password
         }
         else
         {
-            QString nExamer = QString("insert into examer values(?, ?, ?, ?, ?, ?)");
+            QString nExamer = QString("insert into examer values(?, ?, ?, ?, ?, ?, ?)");
             query->prepare(nExamer);
             query->bindValue(0, username);
             query->bindValue(1, nickname);
@@ -122,6 +145,7 @@ bool Database::examerSignup(QString nickname, QString username, QString password
             query->bindValue(3, 0);
             query->bindValue(4, 0);
             query->bindValue(5, 0);
+            query->bindValue(6, OFFLINE);
             query->exec();
             qDebug() << "注册成功";
             return true;
@@ -315,7 +339,7 @@ Gamer Database::findGamer(QString username)
     else
     {
         qDebug() << query->lastError();
-        Gamer gamer("", "", 0, 0, 0);
+        Gamer gamer;
         return gamer;
     }
 }
@@ -340,7 +364,47 @@ Examer Database::findExamer(QString username)
     else
     {
         qDebug() << query->lastError();
-        Examer examer("", "", 0, 0, 0);
+        Examer examer;
         return examer;
+    }
+}
+
+void Database::gamerSignout(QString username)
+{
+    query = new QSqlQuery;
+    QString find = QString("select * from gamer where \
+                            username = '%1'").arg(username);
+    query->exec(find);
+
+    if(query->first())
+    {
+        QString offline = QString("update gamer set \
+                                  state = %1 \
+                                  where username = '%2'").arg(OFFLINE).arg(username);
+        query->exec(offline);
+    }
+    else
+    {
+        qDebug() << query->lastError();
+    }
+}
+
+void Database::examerSignout(QString username)
+{
+    query = new QSqlQuery;
+    QString find = QString("select * from examer where \
+                            username = '%1'").arg(username);
+    query->exec(find);
+
+    if(query->first())
+    {
+        QString offline = QString("update examer set \
+                                  state = %1 \
+                                  where username = '%2'").arg(OFFLINE).arg(username);
+        query->exec(offline);
+    }
+    else
+    {
+        qDebug() << query->lastError();
     }
 }

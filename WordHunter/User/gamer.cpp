@@ -2,6 +2,7 @@
 #include "Database/database.h"
 
 Gamer::Gamer()
+    : User("", "", 0, 0), passedStageNumber(0)
 {
 
 }

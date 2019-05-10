@@ -47,6 +47,8 @@ void SearchUser::on_searchGamerButton_clicked()
             UserInformation(gamer).exec();
         }
     }
+    usernameLineEdit->clear();
+    usernameLineEdit->setFocus();
 }
 
 void SearchUser::on_searchExamerButton_clicked()
@@ -69,4 +71,6 @@ void SearchUser::on_searchExamerButton_clicked()
             UserInformation(examer).exec();
         }
     }
+    usernameLineEdit->clear();
+    usernameLineEdit->setFocus();
 }

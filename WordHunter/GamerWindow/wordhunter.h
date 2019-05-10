@@ -46,6 +46,7 @@ private:
     QPushButton *startButton;
     QPushButton *endButton;
     QPushButton *submitButton;
+    QLabel *stageLabel;
     QLabel *wordLabel;
     QTimer *countdownTimer;
     QProgressBar *deadlineProgressBar;

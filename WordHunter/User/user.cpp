@@ -51,9 +51,9 @@ void User::addExp(int expAddition)
     const int maxExp = (level + 1) * 10;
 
     experiencePoint += expAddition;
-    if(experiencePoint > maxExp)
+    if(experiencePoint >= maxExp)
     {
-        experiencePoint = experiencePoint - maxExp - 1;
+        experiencePoint = experiencePoint - maxExp;
         addLevel(1);
     }
 }

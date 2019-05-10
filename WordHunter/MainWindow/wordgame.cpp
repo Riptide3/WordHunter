@@ -30,10 +30,12 @@ WordGame::WordGame(Examer _examer, QWidget *parent)
     wordmaker = new WordMaker(&examer);
     rankingList = new RankingList;
     detailInfo = new DetailInformation(&examer);
+    searchUser = new SearchUser;
     contentTab = new QTabWidget;
     contentTab->addTab(wordmaker, tr("出题"));
     contentTab->addTab(rankingList, tr("排行榜"));
     contentTab->addTab(detailInfo, tr("用户信息"));
+    contentTab->addTab(searchUser, tr("查找用户"));
 
     mainLayout = new QGridLayout(this);
 
@@ -78,5 +80,33 @@ void WordGame::refreshExamerInfo(int index)
 
         default:
             break;
+    }
+}
+
+void WordGame::closeEvent(QCloseEvent *event)
+{
+    QMessageBox::StandardButton button;
+    button = QMessageBox::question(this, tr("退出"),
+        QString(tr("退出游戏?")),
+        QMessageBox::Yes | QMessageBox::No);
+
+    if(button == QMessageBox::No)
+    {
+        event->ignore();
+    }
+    else
+    {
+        Database db;
+        if(gamer.getUsername().isEmpty())
+        {
+            db.examerSignout(examer.getUsername());
+            qDebug() << "出题人退出登录";
+        }
+        else
+        {
+            db.gamerSignout(gamer.getUsername());
+            qDebug() << "玩家退出登录";
+        }
+        event->accept();
     }
 }

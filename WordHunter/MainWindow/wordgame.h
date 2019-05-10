@@ -36,6 +36,7 @@ private:
 private slots:
     void refreshGamerInfo(int index);
     void refreshExamerInfo(int index);
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // WORDGAME_H

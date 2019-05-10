@@ -68,17 +68,19 @@ void SignIn::on_signinButton_clicked()
     }
     else
     {
-        bool success = false;
+        STATE state = ERROR;
         if(selectButton->checkedId() == 0)
         {
-            success = db.gamerSignin(username, password);
+            state = db.gamerSignin(username, password);
+            qDebug() << "玩家登录" << state;
         }
         else if(selectButton->checkedId() == 1)
         {
-            success = db.examerSignin(username, password);
+            state = db.examerSignin(username, password);
         }
 
-        if(success && selectButton->checkedId() == 0)
+
+        if(state == OFFLINE && selectButton->checkedId() == 0)
         {
             QMessageBox::information(this, tr("提示信息"), tr("登录成功!"), QMessageBox::Ok);
             accept();
@@ -88,7 +90,7 @@ void SignIn::on_signinButton_clicked()
             wordgame->setAttribute(Qt::WA_DeleteOnClose);
             wordgame->show();
         }
-        else if(success && selectButton->checkedId() == 1)
+        else if(state == OFFLINE && selectButton->checkedId() == 1)
         {
             QMessageBox::information(this, tr("提示信息"), tr("登录成功!"), QMessageBox::Ok);
             accept();
@@ -96,6 +98,13 @@ void SignIn::on_signinButton_clicked()
             wordgame = new WordGame(examer);
             wordgame->setAttribute(Qt::WA_DeleteOnClose);
             wordgame->show();
+        }
+        else if(state == ONLINE)
+        {
+            QMessageBox::warning(this, tr("警告!"), tr("该用户已经登录！"), QMessageBox::Ok);
+            usernameLineEdit->clear();
+            passwordLineEdit->clear();
+            usernameLineEdit->setFocus();
         }
         else
         {

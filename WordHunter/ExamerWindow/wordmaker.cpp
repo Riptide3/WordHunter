@@ -5,17 +5,17 @@ WordMaker::WordMaker(Examer *_examer, QWidget *parent)
 {
     welcomeLabel = new QLabel;
     welcomeLabel->setText(examer->getNickname() + tr("，欢迎登录！"));
-    wordInputLineEdit = new QLineEdit;
-    wordInputLineEdit->setFocus();
+    wordInputTextEdit = new QPlainTextEdit;
+    wordInputTextEdit->setPlaceholderText(tr("请输入单词，以换行分割\n注意：单词中不允许出现特殊符号！"));
+    wordInputDoc = new QTextDocument;
     submitButton = new QPushButton;
     submitButton->setText(tr("确认添加"));
 
     wordmakerLayout = new QGridLayout(this);
     wordmakerLayout->addWidget(welcomeLabel, 0, 0);
-    wordmakerLayout->addWidget(wordInputLineEdit, 1, 0, 1, 1, Qt::AlignCenter);
+    wordmakerLayout->addWidget(wordInputTextEdit, 1, 0);
     wordmakerLayout->addWidget(submitButton, 2, 0, 1, 1, Qt::AlignCenter);
 
-    connect(wordInputLineEdit, SIGNAL(returnPressed()), this, SLOT(on_submitButton_clicked()));
     connect(submitButton, SIGNAL(clicked()), this, SLOT(on_submitButton_clicked()));
 }
 
@@ -26,25 +26,52 @@ WordMaker::~WordMaker()
 
 void WordMaker::on_submitButton_clicked()
 {
-    QString word = wordInputLineEdit->text().trimmed();
+    wordInputDoc = wordInputTextEdit->document();
+    QTextBlock block;
+    int count = 0;
+    QString word;
+
+    for (block = wordInputDoc->begin(); block != wordInputDoc->end(); block = block.next())
+    {
+        word = block.text().trimmed();
+        if(isValid(word))
+        {
+            if(database.addWord(word))
+            {
+                examer->addExp(word.length());
+                examer->addQuestionNumber(1);
+                examer->updateInfo(*examer);
+                count++;
+            }
+        }
+    }
+
+    QMessageBox::information(this, tr("提示信息"), tr("成功添加") + QString::number(count) + tr("个单词"), QMessageBox::Ok);
+    wordInputTextEdit->clear();
+    wordInputTextEdit->setFocus();
+}
+
+bool WordMaker::isValid(const QString &word)
+{
+    bool valid = true;
     if(word.isEmpty())
     {
-        ;// do nothing
+        valid = false;
     }
     else
     {
-        if(database.addWord(word))
+        for (auto it = word.begin(); it != word.end(); it++)
         {
-            examer->addExp(word.length());
-            examer->addQuestionNumber(1);
-            examer->updateInfo(*examer);
-            QMessageBox::information(this, tr("提示信息"), tr("添加成功"), QMessageBox::Ok);
+            if((('A'<= *it) && (*it <= 'Z')) || (('a' <= *it) && (*it <= 'z')))
+            {
+                ; // do nothing
+            }
+            else
+            {
+                valid = false;
+                return valid;
+            }
         }
-        else
-        {
-            QMessageBox::warning(this, tr("提示信息"), tr("添加失败，单词已存在"), QMessageBox::Ok);
-        }
-        wordInputLineEdit->clear();
-        wordInputLineEdit->setFocus();
     }
+    return  valid;
 }

@@ -4,7 +4,9 @@
 #include <QWidget>
 #include <QLabel>
 #include <QPushButton>
-#include <QLineEdit>
+#include <QPlainTextEdit>
+#include <QTextDocument>
+#include <QTextBlock>
 #include <QGridLayout>
 
 #include "User/examer.h"
@@ -18,6 +20,9 @@ public:
     WordMaker(Examer *_examer, QWidget *parent = nullptr);
     ~WordMaker();
 
+private:
+    bool isValid(const QString &word);
+
 signals:
 
 public slots:
@@ -29,9 +34,11 @@ private:
     Examer *examer;
 
     QLabel *welcomeLabel;
-    QLineEdit *wordInputLineEdit;
     QPushButton *submitButton;
     QGridLayout *wordmakerLayout;
+
+    QPlainTextEdit *wordInputTextEdit;
+    QTextDocument *wordInputDoc;
 };
 
 #endif // WORDMAKER_H

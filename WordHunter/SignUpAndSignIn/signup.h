@@ -10,6 +10,8 @@
 #include <QButtonGroup>
 #include <QGridLayout>
 
+#include "Client/client.h"
+
 class SignUp: public QDialog
 {
     Q_OBJECT
@@ -27,6 +29,9 @@ private:
     QButtonGroup *selectButton;
 private slots:
     void on_signupButton_clicked();
+    void readInfo();
+private:
+    Client *client;
 };
 
 #endif // SIGNUP_H

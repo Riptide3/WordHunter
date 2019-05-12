@@ -10,14 +10,24 @@ WordGame::WordGame(Gamer _gamer, QWidget *parent)
     detailInfo = new DetailInformation(&gamer);
     searchUser = new SearchUser;
     contentTab = new QTabWidget;
-    contentTab->addTab(wordhunter, tr("游戏"));
+    contentTab->addTab(wordhunter, tr("单词猎人"));
     contentTab->addTab(rankingList, tr("排行榜"));
     contentTab->addTab(detailInfo, tr("用户信息"));
     contentTab->addTab(searchUser, tr("查找用户"));
 
-    this->setCentralWidget(contentTab);
+    centralWidget = new QWidget(this);
+    mainLayout = new QGridLayout;
+    mainLayout->addWidget(contentTab);
+    centralWidget->setLayout(mainLayout);
+
+    this->setCentralWidget(centralWidget);
+
+    client = new Client(this);
+    client->initClient();
+    client->connectServer();
 
     connect(contentTab, SIGNAL(tabBarClicked(int)), this, SLOT(refreshGamerInfo(int)));
+    connect(client->getInfoSender(), SIGNAL(readyRead()), this, SLOT(readInfo()));
 }
 
 WordGame::WordGame(Examer _examer, QWidget *parent)
@@ -30,14 +40,24 @@ WordGame::WordGame(Examer _examer, QWidget *parent)
     detailInfo = new DetailInformation(&examer);
     searchUser = new SearchUser;
     contentTab = new QTabWidget;
-    contentTab->addTab(wordmaker, tr("出题"));
+    contentTab->addTab(wordmaker, tr("单词生产户"));
     contentTab->addTab(rankingList, tr("排行榜"));
     contentTab->addTab(detailInfo, tr("用户信息"));
     contentTab->addTab(searchUser, tr("查找用户"));
 
-    this->setCentralWidget(contentTab);
+    centralWidget = new QWidget(this);
+    mainLayout = new QGridLayout;
+    mainLayout->addWidget(contentTab);
+    centralWidget->setLayout(mainLayout);
+
+    this->setCentralWidget(centralWidget);
+
+    client = new Client(this);
+    client->initClient();
+    client->connectServer();
 
     connect(contentTab, SIGNAL(tabBarClicked(int)), this, SLOT(refreshExamerInfo(int)));
+    connect(client->getInfoSender(), SIGNAL(readyRead()), this, SLOT(readInfo()));
 }
 
 WordGame::~WordGame()
@@ -92,17 +112,34 @@ void WordGame::closeEvent(QCloseEvent *event)
     }
     else
     {
-        Database db;
         if(gamer.getUsername().isEmpty())
         {
-            db.examerSignout(examer.getUsername());
+            client->sendInfo(EXAMER_SIGNOUT, examer.getUsername());
             qDebug() << "出题人退出登录";
         }
         else
         {
-            db.gamerSignout(gamer.getUsername());
+            client->sendInfo(GAMER_SIGNOUT, gamer.getUsername());
             qDebug() << "玩家退出登录";
         }
+        while(online)
+        {
+            QTime t;
+            t.start();
+            while(t.elapsed() < 100)
+            QCoreApplication::processEvents();
+        }
         event->accept();
+    }
+}
+
+void WordGame::readInfo()
+{
+    QJsonObject receivedInfo = client->getInfo();
+    FUNCTION func = static_cast<FUNCTION>(receivedInfo.take("function").toInt());
+    qDebug() << "退出成功";
+    if(func == GAMER_SIGNOUT || func == EXAMER_SIGNOUT)
+    {
+        online = false;
     }
 }

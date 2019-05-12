@@ -1,14 +1,18 @@
 #include "signin.h"
 #include "signup.h"
-#include "Database/database.h"
 
 SignIn::SignIn(QWidget *parent)
     : QDialog(parent)
 {
     initUI();
 
+    client = new Client(this);
+    client->initClient();
+    client->connectServer();
+
     connect(signinButton, SIGNAL(clicked()), this, SLOT(on_signinButton_clicked()));
     connect(signupButton, SIGNAL(clicked()), this, SLOT(on_signupButton_clicked()));
+    connect(client->getInfoSender(), SIGNAL(readyRead()), this, SLOT(readInfo()));
 }
 
 SignIn::~SignIn()
@@ -59,7 +63,6 @@ void SignIn::initUI()
 
 void SignIn::on_signinButton_clicked()
 {
-    Database db;
     QString username = usernameLineEdit->text().trimmed();
     QString password = passwordLineEdit->text().trimmed();
     if(username.isEmpty() || password.isEmpty())
@@ -68,35 +71,43 @@ void SignIn::on_signinButton_clicked()
     }
     else
     {
-        STATE state = NOUSER;
         if(selectButton->checkedId() == 0)
         {
-            state = db.gamerSignin(username, password);
+            client->sendInfo(GAMER_SIGNIN, username, password);
         }
         else if(selectButton->checkedId() == 1)
         {
-            state = db.examerSignin(username, password);
+            client->sendInfo(EXAMER_SIGNIN, username, password);
         }
+    }
+}
 
+void SignIn::on_signupButton_clicked()
+{
+    SignUp signup;
+    signup.exec();
+}
 
+void SignIn::readInfo()
+{
+    QJsonObject receivedInfo = client->getInfo();
+    QString username = usernameLineEdit->text().trimmed();
+    FUNCTION func = static_cast<FUNCTION>(receivedInfo.take("function").toInt());
+
+    if(func == GAMER_SIGNIN || func == EXAMER_SIGNIN)
+    {
+        STATE state = static_cast<STATE>(receivedInfo.take("state").toInt());
         if(state == OFFLINE && selectButton->checkedId() == 0)
         {
             QMessageBox::information(this, tr("提示信息"), tr("登录成功!"), QMessageBox::Ok);
-            accept();
-            Gamer gamer = db.getGamerInfo(username);
-
-            wordgame = new WordGame(gamer);
-            wordgame->setAttribute(Qt::WA_DeleteOnClose);
-            wordgame->show();
+            qDebug() << "获取用户信息时获取到的用户名是" << username;
+            client->sendInfo(GET_GAMERINFO, username);
         }
         else if(state == OFFLINE && selectButton->checkedId() == 1)
         {
             QMessageBox::information(this, tr("提示信息"), tr("登录成功!"), QMessageBox::Ok);
-            accept();
-            Examer examer = db.getExamerInfo(username);
-            wordgame = new WordGame(examer);
-            wordgame->setAttribute(Qt::WA_DeleteOnClose);
-            wordgame->show();
+
+            client->sendInfo(GET_EXAMERINFO, username);
         }
         else if(state == ONLINE)
         {
@@ -120,10 +131,33 @@ void SignIn::on_signinButton_clicked()
             usernameLineEdit->setFocus();
         }
     }
-}
+    else if(func == GET_GAMERINFO)
+    {
+        QString nickname = receivedInfo.take("nickname").toString();
+        QString username = receivedInfo.take("username").toString();
+        int level = receivedInfo.take("level").toInt();
+        int exp = receivedInfo.take("exp").toInt();
+        int passedStage = receivedInfo.take("passedStage").toInt();
 
-void SignIn::on_signupButton_clicked()
-{
-    SignUp signup;
-    signup.exec();
+        Gamer gamer(nickname, username, level, exp, passedStage);
+        qDebug() << nickname << "开启游戏";
+        accept();
+        wordgame = new WordGame(gamer);
+        wordgame->setAttribute(Qt::WA_DeleteOnClose);
+        wordgame->show();
+    }
+    else if(func == GET_EXAMERINFO)
+    {
+        QString nickname = receivedInfo.take("nickname").toString();
+        QString username = receivedInfo.take("username").toString();
+        int level = receivedInfo.take("level").toInt();
+        int exp = receivedInfo.take("exp").toInt();
+        int questionNum = receivedInfo.take("qusetionNum").toInt();
+
+        Examer examer(nickname, username, level, exp, questionNum);
+        accept();
+        wordgame = new WordGame(examer);
+        wordgame->setAttribute(Qt::WA_DeleteOnClose);
+        wordgame->show();
+    }
 }

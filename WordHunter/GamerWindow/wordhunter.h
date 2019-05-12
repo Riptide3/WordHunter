@@ -8,12 +8,13 @@
 #include <QLineEdit>
 #include <QProgressBar>
 #include <QTimer>
-#include <QTime>
 #include <QCoreApplication>
 #include <QtGlobal>
+#include <QMessageBox>
 
 #include "User/gamer.h"
-#include "Database/database.h"
+#include "Client/client.h"
+//#include "Database/database.h"
 
 class WordHunter: public QWidget
 {
@@ -25,22 +26,25 @@ public:
 protected:
     void initUI();
 signals:
-public slots:
+private slots:
     void on_startButton_clicked();
     void on_endButton_clicked();
     void on_submitButton_clicked();
     void countdown();
+    void readInfo();
 private:
     void startGame();
     void endGame();
     void showNextWord();
     bool isCorrect();
+    void updateInfo(const Gamer &gamer);
 private:
+    Client *client;
     Gamer *gamer;
-    Database db;
     QString word;
     int wordNum;
     int stage;
+    bool updating = true;
 
     QLabel *welcomeLabel;
     QPushButton *startButton;

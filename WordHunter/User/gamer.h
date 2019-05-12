@@ -13,7 +13,6 @@ public:
 
     int getPassedStageNumber() const;
     void addStage(int stageAddition);
-    void updateInfo(const Gamer &gamer);
 private:
     int passedStageNumber;
 };

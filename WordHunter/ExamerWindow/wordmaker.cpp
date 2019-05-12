@@ -16,7 +16,13 @@ WordMaker::WordMaker(Examer *_examer, QWidget *parent)
     wordmakerLayout->addWidget(wordInputTextEdit, 1, 0);
     wordmakerLayout->addWidget(submitButton, 2, 0, 1, 1, Qt::AlignCenter);
 
+
+    client = new Client(this);
+    client->initClient();
+    client->connectServer();
+
     connect(submitButton, SIGNAL(clicked()), this, SLOT(on_submitButton_clicked()));
+    connect(client->getInfoSender(), SIGNAL(readyRead()), this, SLOT(readInfo()));
 }
 
 WordMaker::~WordMaker()
@@ -28,25 +34,27 @@ void WordMaker::on_submitButton_clicked()
 {
     wordInputDoc = wordInputTextEdit->document();
     QTextBlock block;
-    int count = 0;
-    QString word;
+    successCount = 0;
 
     for (block = wordInputDoc->begin(); block != wordInputDoc->end(); block = block.next())
     {
         word = block.text().trimmed();
         if(isValid(word))
         {
-            if(database.addWord(word))
+            client->sendInfo(ADDWORD, word);
+            while(adding || updating)
             {
-                examer->addExp(word.length());
-                examer->addQuestionNumber(1);
-                examer->updateInfo(*examer);
-                count++;
+                qDebug() << "死循环？";
+                QTime t;
+                t.start();
+                while(t.elapsed() < 100)
+                QCoreApplication::processEvents();
             }
+            adding = true;
+            updating = true;
         }
     }
-
-    QMessageBox::information(this, tr("提示信息"), tr("成功添加") + QString::number(count) + tr("个单词"), QMessageBox::Ok);
+    QMessageBox::information(this, tr("提示信息"), tr("成功添加") + QString::number(successCount) + tr("个单词"), QMessageBox::Ok);
     wordInputTextEdit->clear();
     wordInputTextEdit->setFocus();
 }
@@ -74,4 +82,41 @@ bool WordMaker::isValid(const QString &word)
         }
     }
     return  valid;
+}
+
+void WordMaker::readInfo()
+{
+    QJsonObject receivedInfo = client->getInfo();
+    FUNCTION func = static_cast<FUNCTION>(receivedInfo.take("function").toInt());
+    qDebug() << "到底是什么func" << func;
+    if(func == ADDWORD)
+    {
+        bool success = receivedInfo.take("success").toBool();
+        adding = false;
+        if(success)
+        {
+            examer->addExp(word.length());
+            examer->addQuestionNumber(1);
+            updateInfo(*examer);
+            qDebug() << "即将更新信息";
+            successCount++;
+        }
+    }
+    else if(func == UPDATE_EXAMERINFO)
+    {
+        updating = false;
+        qDebug() << "信息更新";
+    }
+}
+
+void WordMaker::updateInfo(const Examer &examer)
+{
+    ExamerInfo examerinfo;
+    examerinfo.nickname = examer.getNickname();
+    examerinfo.username = examer.getUsername();
+    examerinfo.level = examer.getLevel();
+    examerinfo.exp = examer.getExperiencePoint();
+    examerinfo.questionNum = examer.getQuestionNumber();
+
+    client->sendInfo(UPDATE_EXAMERINFO, examerinfo);
 }

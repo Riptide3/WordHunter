@@ -11,6 +11,7 @@
 #include "User/gamer.h"
 #include "User/examer.h"
 #include "userinformation.h"
+#include "Client/client.h"
 
 class SearchUser: public QWidget
 {
@@ -22,7 +23,10 @@ public:
 private slots:
     void on_searchGamerButton_clicked();
     void on_searchExamerButton_clicked();
+    void readInfo();
 private:
+    Client *client;
+
     QLineEdit *usernameLineEdit;
     QPushButton *searchGamerButton;
     QPushButton *searchExamerButton;

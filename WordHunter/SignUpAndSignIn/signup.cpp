@@ -1,12 +1,16 @@
 #include "signup.h"
-#include "Database/database.h"
 
 SignUp::SignUp(QWidget *parent)
     : QDialog(parent)
 {
     initUI();
 
+    client = new Client(this);
+    client->initClient();
+    client->connectServer();
+
     connect(signupButton, SIGNAL(clicked()), this, SLOT(on_signupButton_clicked()));
+    connect(client->getInfoSender(), SIGNAL(readyRead()), this, SLOT(readInfo()));
 }
 
 SignUp::~SignUp()
@@ -46,8 +50,8 @@ void SignUp::initUI()
     examerButton = new QRadioButton;
     examerButton->setText(tr("出题人"));
     selectButton = new QButtonGroup;
-    selectButton->addButton(gamerButton, 1);
-    selectButton->addButton(examerButton, 2);
+    selectButton->addButton(gamerButton, 0);
+    selectButton->addButton(examerButton, 1);
 
     QGridLayout *selectUserLayout = new QGridLayout;
     selectUserLayout->addWidget(gamerButton, 0, 0);
@@ -67,12 +71,11 @@ void SignUp::initUI()
 
 void SignUp::on_signupButton_clicked()
 {
-    Database db;
     QString nickname = nicknameLineEdit->text().trimmed();
     QString username = usernameLineEdit->text().trimmed();
     QString password = passwordLineEdit->text().trimmed();
     QString repassword = rePasswordLineEdit->text().trimmed();
-    bool success = false;
+
     if(nickname.isEmpty() || username.isEmpty() || password.isEmpty() || repassword.isEmpty())
     {
         QMessageBox::warning(this, tr("警告"), tr("个人资料不能为空"), QMessageBox::Ok);
@@ -81,30 +84,13 @@ void SignUp::on_signupButton_clicked()
     {
         if(password == repassword)
         {
-            if(selectButton->checkedId() == 1)
+            if(selectButton->checkedId() == 0)
             {
-                success = db.gamerSignup(nickname, username, password);
+                client->sendInfo(GAMER_SIGNUP, nickname, username, password);
             }
-            else if(selectButton->checkedId() == 2)
+            else if(selectButton->checkedId() == 1)
             {
-                success = db.examerSignup(nickname, username, password);
-            }
-
-            if(success)
-            {
-                QMessageBox::information(this, tr("提示信息"), tr("注册成功！"), QMessageBox::Ok);
-                nicknameLineEdit->clear();
-                usernameLineEdit->clear();
-                passwordLineEdit->clear();
-                rePasswordLineEdit->clear();
-                nicknameLineEdit->setFocus();
-            }
-            else
-            {
-                QMessageBox::warning(this, tr("警告"), tr("注册失败，用户名已存在！"), QMessageBox::Ok);
-
-                usernameLineEdit->clear();
-                usernameLineEdit->setFocus();
+                client->sendInfo(EXAMER_SIGNUP, nickname, username, password);
             }
         }
         else
@@ -114,5 +100,30 @@ void SignUp::on_signupButton_clicked()
             passwordLineEdit->setFocus();
             QMessageBox::warning(this, tr("警告"), tr("两次输入密码不一致"), QMessageBox::Ok);
         }
+    }
+}
+
+void SignUp::readInfo()
+{
+    qDebug() << "客户端收到服务器发来的信息";
+    QJsonObject receivedInfo = client->getInfo();
+    FUNCTION func = static_cast<FUNCTION>(receivedInfo.take("function").toInt());
+    bool success = receivedInfo.take("success").toBool();
+    qDebug() << func << "注册是否成功" << success;
+    if((func == GAMER_SIGNUP || func == EXAMER_SIGNUP) && success)
+    {
+        QMessageBox::information(this, tr("提示信息"), tr("注册成功！"), QMessageBox::Ok);
+        nicknameLineEdit->clear();
+        usernameLineEdit->clear();
+        passwordLineEdit->clear();
+        rePasswordLineEdit->clear();
+        nicknameLineEdit->setFocus();
+    }
+    else if((func == GAMER_SIGNUP || func == EXAMER_SIGNUP) && !success)
+    {
+        QMessageBox::warning(this, tr("警告"), tr("注册失败，用户名已存在！"), QMessageBox::Ok);
+
+        usernameLineEdit->clear();
+        usernameLineEdit->setFocus();
     }
 }

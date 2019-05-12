@@ -14,6 +14,7 @@
 #include "MainWindow/wordgame.h"
 #include "User/gamer.h"
 #include "User/examer.h"
+#include "Client/client.h"
 
 class SignIn: public QDialog
 {
@@ -35,9 +36,12 @@ private:
     QGridLayout *signinLayout;
 
     WordGame *wordgame;
+
+    Client *client;
 private slots:
     void on_signinButton_clicked();
     void on_signupButton_clicked();
+    void readInfo();
 };
 
 #endif // SIGNIN_H

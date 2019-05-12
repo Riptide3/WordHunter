@@ -5,6 +5,9 @@
 #include <QTableWidget>
 #include <QVector>
 #include <QGridLayout>
+#include <QHeaderView>
+
+#include "Client/client.h"
 
 class RankingList: public QWidget
 {
@@ -17,9 +20,12 @@ public:
 private slots:
     void sortGamerColumn(int index);
     void sortExamerColumn(int index);
+    void readInfo();
 private:
     void initRanklist();
 private:
+    Client *client;
+
     QTableWidget *gamerRanklist;
     QTableWidget *examerRanklist;
 

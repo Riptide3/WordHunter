@@ -6,6 +6,7 @@
 
 QT       += core gui
 QT       += sql
+QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,7 +26,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-    Database/database.cpp \
     DetailinfoWindow/detailinformation.cpp \
     ExamerWindow/wordmaker.cpp \
     GamerWindow/wordhunter.cpp \
@@ -37,10 +37,10 @@ SOURCES += main.cpp\
     User/gamer.cpp \
     User/user.cpp \
     SearchUserWindow/searchuser.cpp \
-    SearchUserWindow/userinformation.cpp
+    SearchUserWindow/userinformation.cpp \
+    Client/client.cpp
 
 HEADERS  += \
-    Database/database.h \
     DetailinfoWindow/detailinformation.h \
     ExamerWindow/wordmaker.h \
     GamerWindow/wordhunter.h \
@@ -52,6 +52,7 @@ HEADERS  += \
     User/gamer.h \
     User/user.h \
     SearchUserWindow/searchuser.h \
-    SearchUserWindow/userinformation.h
+    SearchUserWindow/userinformation.h \
+    Client/client.h
 
 SUBDIRS += WordHunter.pro

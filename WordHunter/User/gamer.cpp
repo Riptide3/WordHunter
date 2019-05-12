@@ -1,5 +1,4 @@
 #include "gamer.h"
-#include "Database/database.h"
 
 Gamer::Gamer()
     : User("", "", 0, 0), passedStageNumber(0)
@@ -28,8 +27,3 @@ void Gamer::addStage(int stageAddition)
     passedStageNumber += stageAddition;
 }
 
-void Gamer::updateInfo(const Gamer &gamer)
-{
-    Database db;
-    db.updateInfo(gamer);
-}

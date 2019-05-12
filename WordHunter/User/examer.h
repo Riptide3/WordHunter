@@ -13,7 +13,6 @@ public:
 
     int getQuestionNumber() const;
     void addQuestionNumber(int questionAddition);
-    void updateInfo(const Examer &examer);
 private:
     int questionNumber;
 };

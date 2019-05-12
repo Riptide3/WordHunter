@@ -8,9 +8,10 @@
 #include <QTextDocument>
 #include <QTextBlock>
 #include <QGridLayout>
+#include <QMessageBox>
 
 #include "User/examer.h"
-#include "Database/database.h"
+#include "Client/client.h"
 
 class WordMaker: public QWidget
 {
@@ -22,14 +23,18 @@ public:
 
 private:
     bool isValid(const QString &word);
-
-signals:
+    void updateInfo(const Examer &examer);
 
 public slots:
     void on_submitButton_clicked();
+    void readInfo();
 
 private:
-    Database database;
+    QString word;
+    int successCount;
+    bool updating = true;
+    bool adding = true;
+    Client *client;
 
     Examer *examer;
 

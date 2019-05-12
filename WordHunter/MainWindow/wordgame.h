@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTabWidget>
+#include <QTime>
 
 #include "User/gamer.h"
 #include "User/examer.h"
@@ -11,6 +12,7 @@
 #include "RanklistWindow/rankinglist.h"
 #include "DetailinfoWindow/detailinformation.h"
 #include "SearchUserWindow/searchuser.h"
+#include "Client/client.h"
 
 class WordGame: public QMainWindow
 {
@@ -23,6 +25,8 @@ public:
 private:
     Gamer gamer;
     Examer examer;
+    Client *client;
+    bool online = true;
 
     QTabWidget *contentTab;
     WordHunter *wordhunter;
@@ -30,10 +34,14 @@ private:
     RankingList *rankingList;
     DetailInformation *detailInfo;
     SearchUser *searchUser;
+
+    QWidget *centralWidget;
+    QGridLayout *mainLayout;
 private slots:
     void refreshGamerInfo(int index);
     void refreshExamerInfo(int index);
     void closeEvent(QCloseEvent *event);
+    void readInfo();
 };
 
 #endif // WORDGAME_H

@@ -39,6 +39,7 @@ void WordHunter::initUI()
     wordLabel = new QLabel;
     wordLabel->hide();
     deadlineProgressBar = new QProgressBar;
+    deadlineProgressBar->setTextVisible(false);
     deadlineProgressBar->hide();
     wordInputLineEdit = new QLineEdit;
     wordInputLineEdit->hide();

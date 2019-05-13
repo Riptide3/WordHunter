@@ -80,6 +80,11 @@ void SignUp::on_signupButton_clicked()
     {
         QMessageBox::warning(this, tr("警告"), tr("个人资料不能为空"), QMessageBox::Ok);
     }
+    else if(nickname.length() > 9 || username.length() < 3 || username.length() > 12 || password.length() < 6 || password.length() > 16)
+    {
+        QMessageBox::warning(this, tr("警告"), \
+                             tr("昵称长度需小于9个字符\n用户名应大于2个字符小于13个字符\n密码应大于5个字符小于16个字符"), QMessageBox::Ok);
+    }
     else
     {
         if(password == repassword)

@@ -88,7 +88,7 @@ void SearchUser::readInfo()
         QString username = receivedInfo.take("username").toString();
         int level = receivedInfo.take("level").toInt();
         int exp = receivedInfo.take("exp").toInt();
-        int questionNum = receivedInfo.take("qusetionNum").toInt();
+        int questionNum = receivedInfo.take("questionNum").toInt();
 
         if(username.isEmpty())
         {

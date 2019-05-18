@@ -4,9 +4,11 @@ WordMaker::WordMaker(Examer *_examer, QWidget *parent)
     : QWidget(parent), examer(_examer)
 {
     welcomeLabel = new QLabel;
-    welcomeLabel->setText(examer->getNickname() + tr("，欢迎登录！"));
+    QFont welcomeLabelFont("STXingkai", 22, 50);
+    welcomeLabel->setFont(welcomeLabelFont);
+    welcomeLabel->setText(examer->getNickname() + tr("，欢迎！"));
     wordInputTextEdit = new QPlainTextEdit;
-    wordInputTextEdit->setPlaceholderText(tr("请输入单词，以换行分割\n注意：单词中不允许出现特殊符号！"));
+    wordInputTextEdit->setPlaceholderText(tr("请输入长度小于15的单词，以换行分割\n注意：单词中不允许出现特殊符号！"));
     wordInputDoc = new QTextDocument;
     submitButton = new QPushButton;
     submitButton->setText(tr("确认添加"));
@@ -48,7 +50,7 @@ void WordMaker::on_submitButton_clicked()
                 QTime t;
                 t.start();
                 while(t.elapsed() < 100)
-                QCoreApplication::processEvents();
+                    QCoreApplication::processEvents();
             }
             adding = true;
             updating = true;
@@ -63,6 +65,10 @@ bool WordMaker::isValid(const QString &word)
 {
     bool valid = true;
     if(word.isEmpty())
+    {
+        valid = false;
+    }
+    else if(word.length() > 15)
     {
         valid = false;
     }

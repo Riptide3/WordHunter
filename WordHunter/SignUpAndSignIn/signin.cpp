@@ -93,14 +93,14 @@ void SignIn::readInfo()
     QJsonObject receivedInfo = client->getInfo();
     QString username = usernameLineEdit->text().trimmed();
     FUNCTION func = static_cast<FUNCTION>(receivedInfo.take("function").toInt());
-
+    qDebug() << "不知道什么时候又收到了消息" << func;
     if(func == GAMER_SIGNIN || func == EXAMER_SIGNIN)
     {
+        qDebug() << "收到登录反馈信息";
         STATE state = static_cast<STATE>(receivedInfo.take("state").toInt());
         if(state == OFFLINE && selectButton->checkedId() == 0)
         {
             QMessageBox::information(this, tr("提示信息"), tr("登录成功!"), QMessageBox::Ok);
-            qDebug() << "获取用户信息时获取到的用户名是" << username;
             client->sendInfo(GET_GAMERINFO, username);
         }
         else if(state == OFFLINE && selectButton->checkedId() == 1)
@@ -152,7 +152,7 @@ void SignIn::readInfo()
         QString username = receivedInfo.take("username").toString();
         int level = receivedInfo.take("level").toInt();
         int exp = receivedInfo.take("exp").toInt();
-        int questionNum = receivedInfo.take("qusetionNum").toInt();
+        int questionNum = receivedInfo.take("questionNum").toInt();
 
         Examer examer(nickname, username, level, exp, questionNum);
         accept();

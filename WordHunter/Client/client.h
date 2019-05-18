@@ -27,10 +27,30 @@ enum FUNCTION
     GET_GAMERRANKLIST,
     GET_EXAMERRANKLIST,
     UPDATE_GAMERINFO,
-    UPDATE_EXAMERINFO
+    UPDATE_EXAMERINFO,
+    GAMERMATCH,
+    GET_PKRESULT,
+    CANCELMATCH,
+    UPDAT_PKINFO
 };
 
-enum STATE {OFFLINE, ONLINE, WRONGPASSWD, NOUSER};
+enum STATE
+{
+    OFFLINE,
+    ONLINE,
+    WRONGPASSWD,
+    NOUSER,
+    MATCHING,
+    PKING,
+    PKEND,
+    MATCHSUCCESS,
+    MATCHFAILURE_MATCHING,
+    MATCHFAILURE_PKING,
+    WIN,
+    LOSE,
+    DRAW,
+    WAIT
+};
 
 struct GamerInfo
 {
@@ -67,6 +87,7 @@ public:
     void sendInfo(FUNCTION func, int difficultDegree);
     void sendInfo(FUNCTION func);
     void sendInfo(FUNCTION func, QString str);
+    void sendInfo(FUNCTION func, QString username, int correctNum, int time);
     QJsonObject getInfo();
     QJsonArray getArrayInfo();
 private:

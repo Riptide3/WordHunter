@@ -9,11 +9,13 @@ WordGame::WordGame(Gamer _gamer, QWidget *parent)
     rankingList = new RankingList;
     detailInfo = new DetailInformation(&gamer);
     searchUser = new SearchUser;
+    onlineBattle = new OnlineBattle(&gamer);
     contentTab = new QTabWidget;
     contentTab->addTab(wordhunter, tr("单词猎人"));
     contentTab->addTab(rankingList, tr("排行榜"));
     contentTab->addTab(detailInfo, tr("用户信息"));
     contentTab->addTab(searchUser, tr("查找用户"));
+    contentTab->addTab(onlineBattle, tr("在线对战"));
 
     centralWidget = new QWidget(this);
     mainLayout = new QGridLayout;

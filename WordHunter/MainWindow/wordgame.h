@@ -13,6 +13,7 @@
 #include "DetailinfoWindow/detailinformation.h"
 #include "SearchUserWindow/searchuser.h"
 #include "Client/client.h"
+#include "BattleWindow/onlinebattle.h"
 
 class WordGame: public QMainWindow
 {
@@ -34,6 +35,7 @@ private:
     RankingList *rankingList;
     DetailInformation *detailInfo;
     SearchUser *searchUser;
+    OnlineBattle *onlineBattle;
 
     QWidget *centralWidget;
     QGridLayout *mainLayout;

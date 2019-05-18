@@ -16,6 +16,7 @@ public:
     int getExperiencePoint() const;
     void changeNickname(QString newNickname);
     void addExp(int expAddition);
+    void subExp(int subtrahend);
 protected:
     void addLevel(int levelAddition);
 private:

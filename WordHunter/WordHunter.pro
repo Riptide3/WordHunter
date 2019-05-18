@@ -8,6 +8,8 @@ QT       += core gui
 QT       += sql
 QT       += network
 
+RC_ICONS = wordgame.ico
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = WordHunter
@@ -38,7 +40,10 @@ SOURCES += main.cpp\
     User/user.cpp \
     SearchUserWindow/searchuser.cpp \
     SearchUserWindow/userinformation.cpp \
-    Client/client.cpp
+    Client/client.cpp \
+    BattleWindow/onlinebattle.cpp \
+    BattleWindow/matchdialog.cpp \
+    BattleWindow/waitingdialog.cpp
 
 HEADERS  += \
     DetailinfoWindow/detailinformation.h \
@@ -53,6 +58,9 @@ HEADERS  += \
     User/user.h \
     SearchUserWindow/searchuser.h \
     SearchUserWindow/userinformation.h \
-    Client/client.h
+    Client/client.h \
+    BattleWindow/onlinebattle.h \
+    BattleWindow/matchdialog.h \
+    BattleWindow/waitingdialog.h
 
 SUBDIRS += WordHunter.pro

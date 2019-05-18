@@ -1,6 +1,6 @@
 #include "client.h"
 
-const QString IP = "10.122.233.13";
+const QString IP = "192.168.43.160";
 const int PORT = 8000;
 
 Client::Client(QWidget *parent)
@@ -103,6 +103,18 @@ void Client::sendInfo(FUNCTION func)
 
     sendInfo(infoObject);
 }
+
+void Client::sendInfo(FUNCTION func, QString username, int correctNum, int time)
+{
+    QJsonObject infoObject;
+    infoObject.insert("function", func);
+    infoObject.insert("username", username);
+    infoObject.insert("correctNum", correctNum);
+    infoObject.insert("time", time);
+
+    sendInfo(infoObject);
+}
+
 void Client::sendInfo(QJsonObject infoObject)
 {
     QJsonDocument infoDocument;

@@ -25,6 +25,8 @@ WordHunter::~WordHunter()
 void WordHunter::initUI()
 {
     welcomeLabel = new QLabel;
+    QFont welcomeLabelFont("STXingkai", 22, 50);
+    welcomeLabel->setFont(welcomeLabelFont);
     welcomeLabel->setText(gamer->getNickname() + tr("，欢迎！"));
     startButton = new QPushButton;
     startButton->setText(tr("我准备好了┗|*｀0′*|┛"));
@@ -35,15 +37,19 @@ void WordHunter::initUI()
     submitButton->setText(tr("提交"));
     submitButton->hide();
     stageLabel = new QLabel;
+    QFont stageLabelFont("KaiTi", 24, 75);
+    stageLabel->setFont(stageLabelFont);
     stageLabel->hide();
     wordLabel = new QLabel;
+    QFont wordLabelFont ("Comic Sans MS", 20, 75);
+    wordLabel->setFont(wordLabelFont);
     wordLabel->hide();
     deadlineProgressBar = new QProgressBar;
     deadlineProgressBar->setTextVisible(false);
     deadlineProgressBar->hide();
     wordInputLineEdit = new QLineEdit;
     wordInputLineEdit->hide();
-    countdownTimer = new QTimer;
+    countdownTimer = new QTimer(this);
 
     wordhunterLayout = new QGridLayout(this);
     wordhunterLayout->addWidget(welcomeLabel, 0, 0);
@@ -52,15 +58,14 @@ void WordHunter::initUI()
     wordhunterLayout->addWidget(stageLabel, 2, 0, 1, 1, Qt::AlignCenter);
     wordhunterLayout->addWidget(wordLabel, 3, 0, 1, 1, Qt::AlignCenter);
     wordhunterLayout->addWidget(deadlineProgressBar, 4, 0, 1, 1, Qt::AlignCenter);
-    wordhunterLayout->addWidget(wordInputLineEdit, 5, 0, 1, 1, Qt::AlignCenter);
-    wordhunterLayout->addWidget(submitButton, 6, 0, 1, 1, Qt::AlignCenter);
+    wordhunterLayout->addWidget(wordInputLineEdit, 4, 0, 1, 1, Qt::AlignCenter);
+    wordhunterLayout->addWidget(submitButton, 5, 0, 1, 1, Qt::AlignCenter);
 }
 
 void WordHunter::on_startButton_clicked()
 {
     startButton->hide();
     endButton->show();
-    submitButton->show();
     stageLabel->show();
     wordLabel->show();
     deadlineProgressBar->show();
@@ -95,7 +100,7 @@ void WordHunter::on_submitButton_clicked()
             QTime t;
             t.start();
             while(t.elapsed() < 100)
-            QCoreApplication::processEvents();
+                QCoreApplication::processEvents();
         }
         updating = true;
         word = "";
@@ -114,7 +119,7 @@ void WordHunter::on_submitButton_clicked()
             QTime t;
             t.start();
             while(t.elapsed() < 100)
-            QCoreApplication::processEvents();
+                QCoreApplication::processEvents();
         }
         updating = true;
         wordInputLineEdit->clear();
@@ -138,12 +143,12 @@ void WordHunter::showNextWord()
     qsrand(static_cast<uint>(QTime(0,0,0).secsTo(QTime::currentTime())));
     if(stage < 30)
     {
-        difficulty = stage / 10 + rand() % 3 + 1;
+        difficulty = stage / 10 + rand() % 3 + 3;
         client->sendInfo(GETWORD, difficulty);
     }
     else
     {
-        difficulty = 7 + rand() % 14;
+        difficulty = 7 + rand() % 9;
         client->sendInfo(GETWORD, difficulty);
     }
     stageLabel->setText(tr("关卡 ") + QString::number(stage));
@@ -186,9 +191,11 @@ void WordHunter::countdown()
     {
         countdownTimer->stop();
         deadlineProgressBar->setValue(deadlineProgressBar->minimum());
+        deadlineProgressBar->hide();
         wordLabel->clear();
         wordInputLineEdit->show();
         wordInputLineEdit->setFocus();
+        submitButton->show();
     }
 }
 
@@ -200,7 +207,6 @@ void WordHunter::readInfo()
     if(func == GETWORD)
     {
         qDebug() << "从服务器中取出单词" << word;
-        wordLabel->setText(word);
 
         countdownTimer->start(50);
 
@@ -215,6 +221,12 @@ void WordHunter::readInfo()
             deadlineProgressBar->setRange(0, 10);
             deadlineProgressBar->setValue(10);
         }
+        QTime t;
+        t.start();
+        while(t.elapsed() < 60)
+            QCoreApplication::processEvents();
+        deadlineProgressBar->show();
+        wordLabel->setText(word);
     }
     else if(func == UPDATE_GAMERINFO)
     {

@@ -5,7 +5,6 @@
 #-------------------------------------------------
 
 QT       += core gui
-QT       += sql
 QT       += network
 
 RC_ICONS = wordgame.ico

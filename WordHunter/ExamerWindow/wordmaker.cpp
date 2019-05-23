@@ -8,7 +8,7 @@ WordMaker::WordMaker(Examer *_examer, QWidget *parent)
     welcomeLabel->setFont(welcomeLabelFont);
     welcomeLabel->setText(examer->getNickname() + tr("，欢迎！"));
     wordInputTextEdit = new QPlainTextEdit;
-    wordInputTextEdit->setPlaceholderText(tr("请输入长度小于15的单词，以换行分割\n注意：单词中不允许出现特殊符号！"));
+    wordInputTextEdit->setPlaceholderText(tr("请输入长度小于15的单词，以换行分割\n注意：单词中不允许出现特殊符号！词库中已有的单词不会被添加！"));
     wordInputDoc = new QTextDocument;
     submitButton = new QPushButton;
     submitButton->setText(tr("确认添加"));
@@ -46,7 +46,6 @@ void WordMaker::on_submitButton_clicked()
             client->sendInfo(ADDWORD, word);
             while(adding || updating)
             {
-                qDebug() << "死循环？";
                 QTime t;
                 t.start();
                 while(t.elapsed() < 100)
@@ -94,7 +93,6 @@ void WordMaker::readInfo()
 {
     QJsonObject receivedInfo = client->getInfo();
     FUNCTION func = static_cast<FUNCTION>(receivedInfo.take("function").toInt());
-    qDebug() << "到底是什么func" << func;
     if(func == ADDWORD)
     {
         bool success = receivedInfo.take("success").toBool();
@@ -106,6 +104,10 @@ void WordMaker::readInfo()
             updateInfo(*examer);
             qDebug() << "即将更新信息";
             successCount++;
+        }
+        else
+        {
+            updating = false;
         }
     }
     else if(func == UPDATE_EXAMERINFO)

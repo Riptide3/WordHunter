@@ -93,7 +93,6 @@ void SignIn::readInfo()
     QJsonObject receivedInfo = client->getInfo();
     QString username = usernameLineEdit->text().trimmed();
     FUNCTION func = static_cast<FUNCTION>(receivedInfo.take("function").toInt());
-    qDebug() << "不知道什么时候又收到了消息" << func;
     if(func == GAMER_SIGNIN || func == EXAMER_SIGNIN)
     {
         qDebug() << "收到登录反馈信息";

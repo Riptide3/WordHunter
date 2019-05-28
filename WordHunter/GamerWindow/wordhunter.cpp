@@ -84,6 +84,7 @@ void WordHunter::on_submitButton_clicked()
     {
         wordInputLineEdit->clear();
         wordInputLineEdit->hide();
+        submitButton->hide();
 
         gamer->addExp(stage + 5);
 

@@ -27,11 +27,11 @@ private:
     QRadioButton *gamerButton, *examerButton;
     QPushButton *signupButton;
     QButtonGroup *selectButton;
+
+    Client *client;
 private slots:
     void on_signupButton_clicked();
     void readInfo();
-private:
-    Client *client;
 };
 
 #endif // SIGNUP_H
